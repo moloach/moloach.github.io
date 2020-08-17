@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="分享自己的一些学习笔记！">
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          C# （lambda表达式） - moloach的博客 | moloach&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2017/08/02/Csharp-lambda/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Moloach&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/paul-gilmore.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#csharp" title="csharp">csharp</a>
+                        
+                    </div>
+                    <h1>C# （lambda表达式）</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by moloach on
+                        2017-08-02
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h1><p>Lambda 表达式是一种可用于创建 委托 或 表达式目录树 类型的 匿名函数 。</p>
+<p>通过使用 lambda 表达式，可以写入可作为参数传递或作为函数调用值返回的本地函数。 </p>
+<p>一般用于编写LINQ查询表达式</p>
+<h2 id="将表达式分配给委托类型"><a href="#将表达式分配给委托类型" class="headerlink" title="将表达式分配给委托类型"></a>将表达式分配给委托类型</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">delegate</span> <span class="keyword">int</span> <span class="title">del</span>(<span class="params"><span class="keyword">int</span> i</span>)</span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    del myDelegate = x =&gt; x * x;</span><br><span class="line">    <span class="keyword">int</span> j = myDelegate(<span class="number">5</span>);<span class="comment">//j=25</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="创建表达式目录树类型"><a href="#创建表达式目录树类型" class="headerlink" title="创建表达式目录树类型"></a>创建表达式目录树类型</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Linq.Expressions'</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> ConsoleApplication1&#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Program</span>&#123;</span></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span><span class="params">(<span class="built_in">string</span>[] args)</span></span>&#123;</span><br><span class="line">            Expression&lt;del&gt; myET = x =&gt; x*x;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="gt-运算符"><a href="#gt-运算符" class="headerlink" title="=&gt; 运算符"></a>=&gt; 运算符</h1><p>=&gt; 标记称作 lambda 运算符。 该标记在 Lambda 表达式中用来将左侧的输入变量与右侧的 lambda 体分离。</p>
+<p>Lambda 表达式是类似于匿名方法的内联表达式，但更加灵活；在以方法语法表示的 LINQ 查询中广泛使用了 Lambda 表达式。</p>
+<p>=&gt;运算符具有跟赋值运算符相同的优先级并且是右结合运算</p>
+<h2 id="表达式lambda"><a href="#表达式lambda" class="headerlink" title="表达式lambda"></a>表达式lambda</h2><figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">基本形式</span><br><span class="line">(input-paramters) =&gt; expression</span><br><span class="line"></span><br><span class="line">(x, y) =&gt; x == y</span><br><span class="line"></span><br><span class="line">只有一个参数时，括号是可选的，否则必须加上</span><br><span class="line"></span><br><span class="line">(<span class="built_in">int</span> x ,<span class="built_in">string</span> s) =&gt; s.<span class="type">Length</span> &gt; x</span><br><span class="line"></span><br><span class="line">零个参数</span><br><span class="line"><span class="literal">()</span> =&gt; <span class="type">SomeMethod</span><span class="literal">()</span></span><br></pre></td></tr></table></figure>
+<h2 id="语句lambda"><a href="#语句lambda" class="headerlink" title="语句lambda"></a>语句lambda</h2><p>语句 lambda 与表达式 lambda 表达式类似，只是语句括在大括号中：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(input-parameters) =&gt; &#123; statement; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">delegate</span> <span class="keyword">void</span> <span class="title">TestDelegate</span>(<span class="params"><span class="keyword">string</span> s</span>)</span>;</span><br><span class="line"></span><br><span class="line">TestDelegate del = n =&gt; &#123;</span><br><span class="line">    <span class="keyword">string</span> s = n + <span class="string">"World"</span>;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="异步lambda"><a href="#异步lambda" class="headerlink" title="异步lambda"></a>异步lambda</h2><p>通过使用 async 和 await 关键字，你可以轻松创建包含异步处理的 lambda 表达式和语句。 </p>
+<p>例如，下面的 Windows 窗体示例包含一个调用和等待异步方法 ExampleMethodAsync的事件处理程序。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">Form1</span> : <span class="title">Form</span>  </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Form1</span>(<span class="params"></span>)  </span></span><br><span class="line"><span class="function"></span>    &#123;  </span><br><span class="line">        InitializeComponent();  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">async</span> <span class="keyword">void</span> <span class="title">button1_Click</span>(<span class="params"><span class="keyword">object</span> sender, EventArgs e</span>)  </span></span><br><span class="line"><span class="function"></span>    &#123;  </span><br><span class="line">        <span class="comment">// ExampleMethodAsync returns a Task.  </span></span><br><span class="line">        <span class="keyword">await</span> ExampleMethodAsync();  </span><br><span class="line">        textBox1.Text += <span class="string">"\r\nControl returned to Click event handler.\n"</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">async</span> Task <span class="title">ExampleMethodAsync</span>(<span class="params"></span>)  </span></span><br><span class="line"><span class="function"></span>    &#123;  </span><br><span class="line">        <span class="comment">// The following line simulates a task-returning asynchronous process.  </span></span><br><span class="line">        <span class="keyword">await</span> Task.Delay(<span class="number">1000</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//更改之后</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">Form1</span> : <span class="title">Form</span>  </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Form1</span>(<span class="params"></span>)  </span></span><br><span class="line"><span class="function"></span>    &#123;  </span><br><span class="line">        InitializeComponent();  </span><br><span class="line">        button1.Click += <span class="keyword">async</span> (sender, e) =&gt;  </span><br><span class="line">        &#123;  </span><br><span class="line">            <span class="comment">// ExampleMethodAsync returns a Task.  </span></span><br><span class="line">            <span class="keyword">await</span> ExampleMethodAsync();  </span><br><span class="line">            textBox1.Text += <span class="string">"\nControl returned to Click event handler.\n"</span>;  </span><br><span class="line">        &#125;;  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">async</span> Task <span class="title">ExampleMethodAsync</span>(<span class="params"></span>)  </span></span><br><span class="line"><span class="function"></span>    &#123;  </span><br><span class="line">        <span class="comment">// The following line simulates a task-returning asynchronous process.  </span></span><br><span class="line">        <span class="keyword">await</span> Task.Delay(<span class="number">1000</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="带有标准查询运算符的lambda"><a href="#带有标准查询运算符的lambda" class="headerlink" title="带有标准查询运算符的lambda"></a>带有标准查询运算符的lambda</h2><p>许多标准查询运算符都具有输入参数，其类型是泛型委托系列 Func&lt;T,TResult&gt; 中的一种。 这些委托使用类型参数来定义输入参数的数量和类型，以及委托的返回类型。 </p>
+<p>Func 委托对于封装用户定义的表达式非常有用，这些表达式将应用于一组源数据中的每个元素。<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public delegate TResult Func&lt;TArg0, TResult&gt;(TArg0, arg0)</span><br><span class="line"></span><br><span class="line">Func&lt;int, bool&gt; myFunc = x =&gt; x == <span class="number">5</span>;  </span><br><span class="line">bool result = myFunc(<span class="number">4</span>); <span class="comment">// returns false of course</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int[] numbers = &#123; <span class="number">5</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">2</span>, <span class="number">0</span> &#125;;  </span><br><span class="line">int oddNumbers = numbers.Count(n =&gt; n % <span class="number">2</span> == <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">var firstNumbersLessThan6 = numbers.TakeWhile(n =&gt; n &lt; <span class="number">6</span>);</span><br><span class="line">var firstSmallNumbers = numbers.TakeWhile((n, index) =&gt; n &gt;= index);</span><br></pre></td></tr></table></figure></p>
+<h2 id="lambda中的类型推理"><a href="#lambda中的类型推理" class="headerlink" title="lambda中的类型推理"></a>lambda中的类型推理</h2><p>在编写 lambda 时，通常不必为输入参数指定类型，因为编译器可以根据 lambda 主体、参数的委托类型以及 C# 语言规范中描述的其他因素来推断类型。 对于大多数标准查询运算符，第一个输入是源序列中的元素类型。</p>
+<p>lambda 的一般规则</p>
+<ul>
+<li>Lambda 包含的参数数量必须与委托类型包含的参数数量相同。</li>
+<li>Lambda 中的每个输入参数必须都能够隐式转换为其对应的委托参数。</li>
+<li>Lambda 的返回值（如果有）必须能够隐式转换为委托的返回类型。<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">customers.Where(<span class="function"><span class="params">c</span> =&gt;</span> c.City == <span class="string">"London"</span>);</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/08/02/Csharp-(const和readonly、静态类、函数、成员、out和ref)/" data-toggle="tooltip" data-placement="top" title="C# (const和readonly、静态类、函数、成员、out和ref)">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/08/01/Csharp（特性，反射，序列化）/" data-toggle="tooltip" data-placement="top" title="C#知识点（特性，反射，序列化）">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#csharp" title="csharp">csharp</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Moloach&#39;s Blog 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> 
+                    <!-- <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!--<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

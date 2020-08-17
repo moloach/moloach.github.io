@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="分享自己的一些学习笔记！">
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          moloach的博客 | moloach&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/page/2/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Moloach&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/paul-gilmore.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>Moloach&#39;s Blog</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">To Be A Better Developer!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                post-container
+            ">
+            
+                <!-- Main Content -->
+
+
+<div class="post-preview">
+
+    <a href="/2019/03/10/shadowsocks-setting/">
+        <h2 class="post-title">
+            shadowsocks setting
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            步骤
+申请服务器vultr  教程
+
+可以安装锐速或者谷歌BBR锐速BBR
+
+问题解决
+
+可以ping通， 但是不能连接ssh 解决方案
+利用内外网检测端口是否开放
+如果内网屏蔽，外网可以
+
+
+
+
+工具内网检测工具外网检测端口 工具
+
+安装shadowsocks安装shadowsocksDebian/Ubuntu12apt-get install python-pippip install ......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2019-03-10
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2019/03/07/协议及其相关/">
+        <h2 class="post-title">
+            HTTPS协议及其相关
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            HTTPS = HTTP + 加密 + 认证 + 完整性保护
+密码学对称加密(Symmetric encryption)通信双方使用同一密钥进行通信。
+
+序列密码 将一字节的明文输入即可得到一字节的密文输出，一般针对无穷序列（RC4）
+分组密码  每次加密一整块数据，例如128字节 需要填充有规律（AES）
+最后的字节指示填充的数据，解码的时候需要删除响应填充
+
+
+
+散列函数（hash fu......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2019-03-07
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/10/22/virtual-machine-setting/">
+        <h2 class="post-title">
+            virtual machine setting
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            新建一台虚拟机1. 在虚拟机管理平台选择硬件存储文件保存的硬盘
+虚拟机显示的是已经创建的虚拟机及其状态
+创建新的虚拟机
+点击“创建/注册虚拟机” -&gt; “创建新虚拟机”
+填写虚拟机唯一名称 -&gt; 选择对应的操作系统
+选择存储的位置
+选择对应的硬件
+一般只要选择CPU, 内存, 硬盘大小即可，其他设置无需改动
+选择对应的系统镜像文件
+
+
+记得选择相应的Network Adapter......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2018-10-22
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/10/04/reserve-ports/">
+        <h2 class="post-title">
+            端口保留
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            端口保留windows端口保留通过端口保留，应用程序可以阻止一定范围内的端口在通配绑定期间被分配。然而，保留某一端口范围并不会阻止应用程序在保留的范围内执行特定的绑定（请求使用特定端口）。保留端口范围时，所选择的端口号连续范围必须是从 1025 到 MaxUserPort 设置值（默认值为 5000）或从 49152 到 65535。多个客户端应用程序可保留相同的范围。取消保留（删除保留）时......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2018-10-04
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/11/16/csharp/">
+        <h2 class="post-title">
+            csharp basic
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1 前言从事 .net 开发两年了，针对基础知识做一个总结
+1.1重要功能
+布尔条件（Boolean Conditions）
+自动垃圾回收（Automatic Garbage Collection）
+标准库（Standard Library）
+组件版本（Assembly Versioning）
+属性（Properties）和事件（Events）
+委托（Delegates）和事件管理（Even......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2017-11-16
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/08/18/csharp-reflection/">
+        <h2 class="post-title">
+            C#知识-反射
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            反射是C#语言机制中获取动态对象属性的语言特性。
+Reflection is a C# language mechanism for accessing dynamic object properties on runtime. Typically, reflection is used to fetch the information about dynamic object type a......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2017-08-18
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/08/17/Csharp 知识点 part 2（out 泛型修饰符，协变和逆变）/">
+        <h2 class="post-title">
+            C# 知识点 part 2（out 泛型修饰符，协变和逆变）
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            out(泛型修饰符)-指定类型参数是协变的对于泛型类型参数，out 关键字可指定类型参数是协变的。 可以在泛型接口和委托中使用 out 关键字。
+协变使你使用的类型可以比泛型参数指定的类型派生程度更大。 这样可以隐式转换实现变体接口的类以及隐式转换委托类型。 引用类型支持协变和逆变，但值类型不支持它们。
+具有协变类型参数的接口使其方法返回的类型可以比类型参数指定的类型派生程度更大。 例如，因......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2017-08-17
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/08/02/Csharp (using, 延迟初始化)/">
+        <h2 class="post-title">
+            C# (using, 延迟初始化)
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            作为指令为命名空间创建别名或导入在其他命名空间中定义的类型。
+允许在命名空间中使用类型，这样无需在该命名空间中限定某个类型的使用
+允许访问类型的静态成员无需限定使用类型名称进行访问。
+为命名空间或类型创建别名。12345using System.Text;using static System.Math;using Project = PC.MyCompany.MyProject;
+usin......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2017-08-02
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/08/02/Csharp 知识点 part 3（协变和逆变）/">
+        <h2 class="post-title">
+            C# 知识点 part 3（协变和逆变）
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            在泛型集合的接口中使用变体协变接口允许其方法返回的派生类型多于接口中指定的派生类型。
+逆变接口允许其方法接受派生类型少于接口中指定的类型的参数。
+在.NET Framework 4 中，多个现有接口已变为协变和逆变接口。 其中包括 IEnumerable 和 IComparable。 这使你可将对基类型的泛型集合进行操作的那些方法重用于派生类型的集合。
+有关 .NET Framework 中......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2017-08-02
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/08/02/Csharp-(const和readonly、静态类、函数、成员、out和ref)/">
+        <h2 class="post-title">
+            C# (const和readonly、静态类、函数、成员、out和ref)
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            const 和 readonly 的区别
+const 一般用于编译时期常数
+ReadOnly 一般用于执行时期常数
+
+
+const仅可用于数字和字符串，readOnly可以为任意形态12345public const DateTime CreateDatetime1 = new DateTIme(2000,1,1,0,0,1);//it will report a error.public ......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by moloach on
+        2017-08-02
+    </p>
+
+</div>
+<hr>
+
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+        <li class="previous">
+            <a href="/">&larr; Newer Posts</a>
+        </li>
+    
+    
+        <li class="next">
+            <a href="/page/3/">Older Posts &rarr;</a>
+        </li>
+    
+</ul>
+
+
+
+                <!-- 如果开启评论功能 -->
+                
+
+            </div>
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                            <a href="/tags/#csharp" title="csharp" rel="8">csharp</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#ceph" title="ceph" rel="3">ceph</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+
+                        
+                            <img src="/img/avatar.jpg">
+                        
+
+                        
+                            <p>一个很无聊的人!</p>
+                        
+
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            
+                            
+
+                            
+
+                            
+
+                            
+                            
+                            
+                            
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Moloach&#39;s Blog 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> 
+                    <!-- <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!--<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

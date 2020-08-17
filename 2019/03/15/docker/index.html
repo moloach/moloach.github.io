@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="分享自己的一些学习笔记！">
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          docker - moloach的博客 | moloach&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2019/03/15/docker/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Moloach&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/paul-gilmore.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#docker" title="docker">docker</a>
+                        
+                    </div>
+                    <h1>docker</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by moloach on
+                        2019-03-15
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo yum <span class="keyword">install</span> docker</span><br><span class="line">sudo apt <span class="keyword">install</span> docker-ce</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#可把普通用户添加到docker用户组来避免使用`sudo`权限</span></span><br></pre></td></tr></table></figure>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建并运行新的镜像（命令）</span></span><br><span class="line">docker run centos <span class="built_in">echo</span> <span class="string">"hello"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并运行新的镜像（交互式）</span></span><br><span class="line">docker run -i -t centos /bin/bash</span><br><span class="line"></span><br><span class="line">docker run -d --name [containerName] centos[imageName] /bin/sh -c <span class="string">"while true; do echo hello docker; sleep 1; done"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动守护容器</span></span><br><span class="line">docker run -d imageName [COMMAND] [Args ..]</span><br><span class="line"></span><br><span class="line"><span class="comment">#退出交互式命令不退出镜像</span></span><br><span class="line">Ctrl+P  Ctrl+Q</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所创建的所有容器</span></span><br><span class="line">docker ps -l -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看某一容器的详情信息</span></span><br><span class="line">docker inspect [container-id]|[container-name]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除某一容器</span></span><br><span class="line">docker rm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始某一存在的容器（回到退出的容器）</span></span><br><span class="line">docker start  [container-id]|[container-name]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 附加到已存在的命令</span></span><br><span class="line">docker attach  [container-id]|[container-name]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看容器日志(了解容器内部运行情况)</span></span><br><span class="line">docker logs [-f][-t][--tail] 容器名</span><br><span class="line">    -f  --follows = <span class="literal">true</span>|<span class="literal">false</span> 默认为<span class="literal">false</span></span><br><span class="line">    -t  --timestamps = <span class="literal">true</span>|<span class="literal">false</span> 默认为<span class="literal">false</span></span><br><span class="line">    --tail = <span class="string">"all"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看容器内进程</span></span><br><span class="line">docker top</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在运行中的容器内启动新进程</span></span><br><span class="line">docker <span class="built_in">exec</span> [-d][-i][-t] 容器名 [COMMAND][ARG..]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止守护容器</span></span><br><span class="line">docker stop containerName (发出停止信号)</span><br><span class="line">docker <span class="built_in">kill</span> containerName （发出直接退出）</span><br></pre></td></tr></table></figure>
+<h2 id="容器端口映射"><a href="#容器端口映射" class="headerlink" title="容器端口映射"></a>容器端口映射</h2><p>使用系统的端口映射到容器的端口，用来提供容器服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">docker run [-P][-p]</span><br><span class="line">    -P, --publish-all=<span class="literal">true</span>|<span class="literal">false</span> 默认为<span class="literal">false</span> , 所有端口</span><br><span class="line">    -p， --public=[]</span><br><span class="line">        containerPort           docker run -p 80 -i -t ..</span><br><span class="line">        hostPort:containerPort  docker run -p 8080:80 -i -t ..</span><br><span class="line">        ip::containerPort       docker run -p 0.0.0.0:80 -i -t ..</span><br><span class="line">        ip:hostPort:containerPort   docker run 0.0.0.0:8080:80  -i -t ..</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看端口映射</span></span><br><span class="line">docker port container-id|container-name</span><br></pre></td></tr></table></figure>
+<h2 id="管理镜像"><a href="#管理镜像" class="headerlink" title="管理镜像"></a>管理镜像</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出镜像</span></span><br><span class="line">docker images [OPTIONS] [REPOSITORY]</span><br><span class="line">    -a, --all=<span class="literal">false</span></span><br><span class="line">    -f, --filter=[]</span><br><span class="line">    --no-trunc=<span class="literal">false</span></span><br><span class="line">    -q, --quit=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看镜像</span></span><br><span class="line">docker inspect [OPTIONS] CONTAINER|IMAGE[CONTAINER|IMAGE...]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除镜像</span></span><br><span class="line">docker rmi [OPTIONS] IMAGE</span><br></pre></td></tr></table></figure>
+<h2 id="获取和推送镜像"><a href="#获取和推送镜像" class="headerlink" title="获取和推送镜像"></a>获取和推送镜像</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查找镜像</span></span><br><span class="line">docker search [OPTIONS]  TERM</span><br><span class="line">    --automated=<span class="literal">false</span></span><br><span class="line">    --no-trunc=<span class="literal">false</span></span><br><span class="line">    --s --stars=0</span><br><span class="line">    最多返回25个结果</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拉取镜像</span></span><br><span class="line">docker pull [OPTIONS] NAME [:TAG]</span><br><span class="line">    -a, --all-tags=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送镜像</span></span><br><span class="line">docker  push [IMAGE:NAME]</span><br></pre></td></tr></table></figure>
+<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">通过容器</span><br><span class="line">docker commit ]<span class="comment">[OPTIONS]</span> <span class="keyword">CONTAINER</span> <span class="comment">[REPOSTORY:<span class="comment">[TAG]</span>]</span></span><br><span class="line"></span><br><span class="line">docker build    dockerfile</span><br></pre></td></tr></table></figure>
+<h3 id="dockerfile"><a href="#dockerfile" class="headerlink" title="dockerfile"></a>dockerfile</h3><blockquote>
+<p><a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="noopener">文档</a><br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"></span></span><br><span class="line"><span class="bash">EXPORT</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="构建缓存"><a href="#构建缓存" class="headerlink" title="构建缓存"></a>构建缓存</h3><p>构建中会缓存构建中间层对象</p>
+<h3 id="查看镜像构建过程"><a href="#查看镜像构建过程" class="headerlink" title="查看镜像构建过程"></a>查看镜像构建过程</h3><p><code>docker history</code></p>
+<h2 id="网络连接"><a href="#网络连接" class="headerlink" title="网络连接"></a>网络连接</h2><p>docker0 网卡（linux 虚拟网桥）</p>
+<ul>
+<li>特点<ul>
+<li>设置IP地址</li>
+<li>相当与拥有一个隐藏的虚拟网卡</li>
+</ul>
+</li>
+<li>地址划分<ul>
+<li>IP：172.17.42.1 MASK：255.255.0.0</li>
+<li>MAC   一个范围</li>
+<li>总共提供了65534个地址</li>
+</ul>
+</li>
+</ul>
+<p>结构图<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">=<span class="ruby">============================</span></span><br><span class="line"><span class="ruby">=                           =</span></span><br><span class="line"><span class="ruby">=        docker<span class="number">0</span>            =</span></span><br><span class="line"><span class="ruby">=   veth*   veth*   veth*   =      HOST</span></span><br><span class="line"><span class="ruby">=    <span class="params">||</span>      <span class="params">||</span>      <span class="params">||</span>     =  </span></span><br><span class="line"><span class="ruby">=============================</span></span><br><span class="line"><span class="ruby">     <span class="params">||</span>      <span class="params">||</span>      <span class="params">||</span>     </span></span><br><span class="line"><span class="ruby">    ======  ======  ======</span></span><br><span class="line"><span class="ruby">    =eth<span class="number">0</span>=  =eth<span class="number">0</span>=  =eth<span class="number">0</span>=       CONTAINERS</span></span><br><span class="line"><span class="ruby">    ======  ======  ======</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="自定义虚拟网桥"><a href="#自定义虚拟网桥" class="headerlink" title="自定义虚拟网桥"></a>自定义虚拟网桥</h5><ul>
+<li><p>添加虚拟网桥</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">sudo</span> <span class="selector-tag">brctl</span> <span class="selector-tag">addbr</span> <span class="selector-tag">br0</span></span><br><span class="line"><span class="selector-tag">sudo</span> <span class="selector-tag">ifconfig</span> <span class="selector-tag">br0</span> 192<span class="selector-class">.168</span><span class="selector-class">.100</span><span class="selector-class">.1</span> <span class="selector-tag">netmask</span> 255<span class="selector-class">.255</span><span class="selector-class">.255</span><span class="selector-class">.0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更改docker守护进程中启动配置</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/etc/</span><span class="keyword">default</span>/docker 中添加DOCKER_OPS值</span><br><span class="line">-b=br0</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="容器之间互联"><a href="#容器之间互联" class="headerlink" title="容器之间互联"></a>容器之间互联</h3><h4 id="允许所有容器互联"><a href="#允许所有容器互联" class="headerlink" title="允许所有容器互联"></a>允许所有容器互联</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">`--icc=true`</span><br><span class="line">默认， 同一网桥之下都可以访问</span><br><span class="line">`--link`</span><br><span class="line">docker run --link=[container-name]:[ALIAS] [IMAGE] [COMMAND]</span><br></pre></td></tr></table></figure>
+<h4 id="拒绝所有容器互联"><a href="#拒绝所有容器互联" class="headerlink" title="拒绝所有容器互联"></a>拒绝所有容器互联</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--icc=false</span><br></pre></td></tr></table></figure>
+<h4 id="允许特定容器互联"><a href="#允许特定容器互联" class="headerlink" title="允许特定容器互联"></a>允许特定容器互联</h4><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">-icc=<span class="literal">false</span> --iptables=<span class="literal">true</span></span></span><br><span class="line"><span class="ruby">--link</span></span><br></pre></td></tr></table></figure>
+<h4 id="容器与外部网络连接"><a href="#容器与外部网络连接" class="headerlink" title="容器与外部网络连接"></a>容器与外部网络连接</h4><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">--ip-forward</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>深入了解可以通过学习iptables</p>
+</blockquote>
+<h2 id="docker数据卷"><a href="#docker数据卷" class="headerlink" title="docker数据卷"></a>docker数据卷</h2><p>数据卷是通过特殊设计的目录， 可以绕过联合文件系统（UFS），为一个或多个容器提供访问</p>
+<p>为了数据的永久化，独立于容器的生存周期。</p>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>在容器启动时初始化，如果容器使用的镜像在挂在店包含了数据， 这些数据会拷贝到新初始化的数据卷中</li>
+<li>数据卷可以在容器之间爱你共享和重用</li>
+<li>可以对数据卷中的内容直接进行修改</li>
+<li>数据卷的变化不会影响镜像的更新</li>
+<li>卷会一致存在，即时挂载数据卷的容器已经删除</li>
+</ul>
+<p>为容器添加数据卷<br><code>docker run -v ~/container_data:/data -it centos /bin/bash</code></p>
+<p>dockerfile文件<br><code>VOLUME [&#39;path/to&#39;]</code></p>
+<h4 id="数据卷容器"><a href="#数据卷容器" class="headerlink" title="数据卷容器"></a>数据卷容器</h4><p>命名的容器挂载数据卷， 其他容器通过挂载这个容器实现数据共享<br><code>docker run --volumes-from [CONTAINER NAME]</code></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/03/18/linuxCommand/" data-toggle="tooltip" data-placement="top" title="linuxCommand">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/03/15/Kubernetes/" data-toggle="tooltip" data-placement="top" title="Kubernetes">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#docker" title="docker">docker</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Moloach&#39;s Blog 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> 
+                    <!-- <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!--<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

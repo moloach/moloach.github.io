@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="分享自己的一些学习笔记！">
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          ceph introduction - moloach的博客 | moloach&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2019/03/13/ceph-introduction/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Moloach&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/paul-gilmore.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#ceph" title="ceph">ceph</a>
+                        
+                    </div>
+                    <h1>ceph introduction</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by moloach on
+                        2019-03-13
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="ceph"><a href="#ceph" class="headerlink" title="ceph"></a>ceph</h1><p>一个软件定义（SDS）、统一存储解决方案（大规模分布式文件系统），与其他分布式文件系统最大的区别就是<strong>采用的CRUSH算法，把数据的元信息分布到多台元信息服务器上(MDS)，没有单点瓶颈</strong>。</p>
+<p>提供多种存储方案：</p>
+<ul>
+<li>块存储： 一般为一大块存储空间，一般用于虚拟机等</li>
+<li>对象存储： 一般为独立的文件，如视频图片数据等</li>
+<li>文件系统存储： 兼容posix接口的文件系统</li>
+</ul>
+<h2 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h2><p align="center"><img width="100%" src="./ceph-architecture.jpg"></p>
+
+<p>ceph存储集群由几个不同的软件守护进程组成，每个守护进程负责Ceph的一个独特功能，每个守护进程彼此独立！</p>
+<h3 id="ceph-组件"><a href="#ceph-组件" class="headerlink" title="ceph 组件"></a>ceph 组件</h3><ul>
+<li>RADOS<br>可靠、自动、分布式对象存储（Reliable Autonomic Distributed Object Store，RADOS）是Ceph存储集群的基础。Ceph中的一切都以对象的形式存储，而RADOS就负责存储这些对象，而不考虑它们的数据类型。RADOS层确保数据一致性和可靠性。对于数据一致性，它执行数据复制、故障检测和恢复，还包括数据在集群节点间的迁移和再平衡。</li>
+<li>OSD<br>（对象存储设备，object storage device）是Ceph集群中存储实际用户数据并响应客户端读操作请求的唯一组件。通常，一个OSD守护进程与集群的一个物理磁盘绑定。所以，一般来说，物理磁盘的总数与Ceph集群中负责存储用户数据到每个物理磁盘的OSD守护进程数是相等的。</li>
+<li><p>MON<br>Ceph monitor（MON）组件通过一系列的map来跟踪整个集群的健康状态，这些map是指下面几个组件的map：OSD、MON、PG和CRUSH。所有的集群节点都向monitor节点报告状态，并分享每一个状态变化的信息。一个monitor为每一个组件维护一个独立的map。monitor不存储实际数据，这是OSD的工作。</p>
+<ul>
+<li>librados<br>是一种用来简化访问RADOS的方法，它目前支持PHP、Ruby、Java、Python、C和C++语言。它提供了Ceph存储集群的一个本地接口RADOS，并且是其他服务（如RBD、RGW）的基础，以及为CephFS提供POSIX接口。librados API支持直接访问RADOS，使得开发者能够创建自己的接口来访问Ceph集群存储。</li>
+</ul>
+</li>
+<li><p>RBD<br>Ceph块设备原来叫做RADOS块设备，它对外提供块存储，它可以被映射、格式化进而像其他磁盘一样挂载到服务器。Ceph块设备具备商业存储的特性，如精简制备和快照。</p>
+</li>
+<li><p>RGW<br>Ceph对象网关也称为RADOS网关，它提供了一个兼容Amazon S3（Simple Storage Service）和OpenStack对象存储API（Swift）的restful API接口。RGW还支持多租户和OpenStack的Keystone身份验证服务。</p>
+</li>
+<li><p>MDS<br>Ceph元数据服务器（MDS）跟踪文件层次结构并存储只供CephFS使用的元数据。Ceph块设备和RADOS网关不需要元数据，因此它们不需要Ceph MDS守护进程。MDS不直接给客户端提供数据，因此可以避免系统中的一个单点故障。</p>
+</li>
+<li><p>CephFS<br>Ceph文件系统（CephFS）提供了一个任意大小且兼容POSIX的分布式文件系统。CephFS依赖Ceph MDS来跟踪文件层次结构，即元数据。目前CephFS不推荐在生产环境使用，但它已进入POC测试的候选序列。它的进展速度非常快，我们相信它很快就能在生产环境中使用了。</p>
+</li>
+</ul>
+<p><strong>注意</strong>： 其中MDS，OSD,MON 是RADOS的底层组件，共同完成RADOS提供的功能！</p>
+<p>各组件<a href="./ceph-RADOS.md">详细说明</a></p>
+<h2 id="Ceph-底层实现"><a href="#Ceph-底层实现" class="headerlink" title="Ceph 底层实现"></a>Ceph 底层实现</h2><h3 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h3><p>一个对象通常包含绑定在一起的数据和元数据，在整个集群中用一个全局唯一ID标识。</p>
+<p>不同于文件，对象可根据元数据的大小变化来改变大小；允许用户管理和访问非结构数据（可分布于多台服务器）；可以不使用目录层次结构或者树状结构，使用一个很大的线性地址空间</p>
+<h3 id="CRUSH算法（Controlled-Replication-Under-Scalable-Hashing）"><a href="#CRUSH算法（Controlled-Replication-Under-Scalable-Hashing）" class="headerlink" title="CRUSH算法（Controlled Replication Under Scalable Hashing）"></a>CRUSH算法（Controlled Replication Under Scalable Hashing）</h3><h3 id="读写操作"><a href="#读写操作" class="headerlink" title="读写操作"></a>读写操作</h3><p>客户端首先联系Ceph中monitor 并获取一个集群map副本。集群map帮助客户端获取Ceph集群的状态和配置信息。使用对象和池名 /ID 将数据转换为对象！然后将对象和PG（placement groups, 归置组）数一起经过散列来确定存储或获取数据所需的主OSD，计算完OSD ID之后，客户端直接连接OSD存储数据，存储完毕后，OSD所在的节点将执行CRUSH查找操作并计算辅助归置组和OSD的位置来实现数据复制，实现高可用！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">participant 数据(名称obj1，池pool1) as data</span><br><span class="line">participant PG(4.32) as pg</span><br><span class="line">participant OSD1 as osd</span><br><span class="line">participant OSD2 as osd2</span><br><span class="line">participant OSD3 as osd3</span><br><span class="line"></span><br><span class="line">data -&gt; pg: hash(object_name) % PG_num </span><br><span class="line">data -&gt; pg: PoolID = 4;</span><br><span class="line">pg -&gt; osd: CRUSH(PG,Cluster State, rule)</span><br><span class="line">osd -&gt; osd3: 复制</span><br><span class="line">osd -&gt; osd2: 复制</span><br></pre></td></tr></table></figure></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/03/13/ceph-RADOS/" data-toggle="tooltip" data-placement="top" title="ceph RADOS">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/03/10/shadowsocks-setting/" data-toggle="tooltip" data-placement="top" title="shadowsocks setting">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#ceph" title="ceph">ceph</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Moloach&#39;s Blog 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> 
+                    <!-- <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!--<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

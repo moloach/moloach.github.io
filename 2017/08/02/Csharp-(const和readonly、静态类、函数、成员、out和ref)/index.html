@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="分享自己的一些学习笔记！">
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          C# (const和readonly、静态类、函数、成员、out和ref) - moloach的博客 | moloach&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2017/08/02/Csharp-(const和readonly、静态类、函数、成员、out和ref)/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Moloach&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/paul-gilmore.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#csharp" title="csharp">csharp</a>
+                        
+                    </div>
+                    <h1>C# (const和readonly、静态类、函数、成员、out和ref)</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by moloach on
+                        2017-08-02
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="const-和-readonly-的区别"><a href="#const-和-readonly-的区别" class="headerlink" title="const 和 readonly 的区别"></a>const 和 readonly 的区别</h1><ol>
+<li>const 一般用于编译时期常数</li>
+<li>ReadOnly 一般用于执行时期常数</li>
+<li></li>
+</ol>
+<h2 id="const仅可用于数字和字符串，readOnly可以为任意形态"><a href="#const仅可用于数字和字符串，readOnly可以为任意形态" class="headerlink" title="const仅可用于数字和字符串，readOnly可以为任意形态"></a>const仅可用于数字和字符串，readOnly可以为任意形态</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public const DateTime CreateDatetime1 = new DateTIme(<span class="number">2000</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line"><span class="comment">//it will report a error.</span></span><br><span class="line"></span><br><span class="line">public static readonly DateTime CreateDatetime1 = new DateTIme(<span class="number">2000</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line"><span class="comment">//OK.</span></span><br></pre></td></tr></table></figure>
+<h2 id="const-能用在方法中，readonly不行"><a href="#const-能用在方法中，readonly不行" class="headerlink" title="const 能用在方法中，readonly不行"></a>const 能用在方法中，readonly不行</h2><h2 id="const-是在编译时产生的，readonly是在运行时产生的"><a href="#const-是在编译时产生的，readonly是在运行时产生的" class="headerlink" title="const 是在编译时产生的，readonly是在运行时产生的"></a>const 是在编译时产生的，readonly是在运行时产生的</h2><p>引用一个readonly常数是引用其变数，而引用const是引用其值，会影响执行时的相容性。</p>
+<blockquote>
+<p>reference: <a href="https://dotblogs.com.tw/yc421206/archive/2011/06/06/27232.aspx" target="_blank" rel="noopener">https://dotblogs.com.tw/yc421206/archive/2011/06/06/27232.aspx</a></p>
+</blockquote>
+<h1 id="静态类和静态类成员"><a href="#静态类和静态类成员" class="headerlink" title="静态类和静态类成员"></a>静态类和静态类成员</h1><p>静态类和非静态类没什么区别，只是静态类不能实例化(无法使用new关键字创建类类型变量)。</p>
+<p>因为不存在任何实例，因此可以使用类名本身访问静态类成员。</p>
+<p>如同System.Math包含的数学运算。</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">System</span>.Math;</span><br><span class="line"></span><br><span class="line">double dub = <span class="number">-3.14</span>;</span><br><span class="line"></span><br><span class="line">Math.<span class="built-in">Abs</span>(dub);</span><br><span class="line">Math.<span class="built-in">Floor</span>(dub);</span><br><span class="line">Math.<span class="built-in">Round</span>(Math.<span class="built-in">Abs</span>(dub));</span><br></pre></td></tr></table></figure>
+<p>与所有类类型的情况一样，静态类的类型信息在引用该类的程序加载时，由 .NET Framework 公共语言运行时 (CLR) 加载.</p>
+<h2 id="静态类主要功能"><a href="#静态类主要功能" class="headerlink" title="静态类主要功能"></a>静态类主要功能</h2><ul>
+<li>只包含静态成员</li>
+<li>无法实例化</li>
+<li>会进行密封</li>
+<li>不能包含实例构造函数</li>
+</ul>
+<h2 id="注意事项和编写建议"><a href="#注意事项和编写建议" class="headerlink" title="注意事项和编写建议"></a>注意事项和编写建议</h2><ol>
+<li>创建静态类基本上于只创建静态成员和私有构造函数的的类相同。<ul>
+<li>只包含静态成员</li>
+<li>私有构造函数可以防止类进行实例化</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>使用静态类的优点是编译器可以进行检查，以确保不会意外地添加任何实例成员。 编译器可保证无法创建此类的实例。</li>
+</ul>
+</li>
+<li>静态类会进行密封，因此不能继承<ul>
+<li>除了Object之外不能继承自任何类</li>
+</ul>
+</li>
+<li>构造函数<ul>
+<li>不能包含实例构造函数</li>
+<li>可包含静态构造函数</li>
+<li>如果类包含需要进行重要初始化的静态成员，则非静态类还应定义静态构造函数。<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> class TemperatureConverter</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> CelsiusToFahrenheit(<span class="keyword">string</span> temperatureCelsius)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Convert argument to double for calculations.</span></span><br><span class="line">        <span class="keyword">double</span> celsius = Double.Parse(temperatureCelsius);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Convert Celsius to Fahrenheit.</span></span><br><span class="line">        <span class="keyword">double</span> fahrenheit = (celsius * <span class="number">9</span> / <span class="number">5</span>) + <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">return</span> fahrenheit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> FahrenheitToCelsius(<span class="keyword">string</span> temperatureFahrenheit)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Convert argument to double for calculations.</span></span><br><span class="line">        <span class="keyword">double</span> fahrenheit = Double.Parse(temperatureFahrenheit);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Convert Fahrenheit to Celsius.</span></span><br><span class="line">        <span class="keyword">double</span> celsius = (fahrenheit - <span class="number">32</span>) * <span class="number">5</span> / <span class="number">9</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">return</span> celsius;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TestTemperatureConverter</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">void</span> Main()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Console</span>.WriteLine(<span class="string">"Please select the convertor direction"</span>);</span><br><span class="line">        <span class="built_in">Console</span>.WriteLine(<span class="string">"1. From Celsius to Fahrenheit."</span>);</span><br><span class="line">        <span class="built_in">Console</span>.WriteLine(<span class="string">"2. From Fahrenheit to Celsius."</span>);</span><br><span class="line">        <span class="built_in">Console</span>.Write(<span class="string">":"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">string</span> selection = <span class="built_in">Console</span>.ReadLine();</span><br><span class="line">        <span class="keyword">double</span> F, C = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">switch</span> (selection)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">case</span> <span class="string">"1"</span>:</span><br><span class="line">                <span class="built_in">Console</span>.Write(<span class="string">"Please enter the Celsius temperature: "</span>);</span><br><span class="line">                F = TemperatureConverter.CelsiusToFahrenheit(<span class="built_in">Console</span>.ReadLine());</span><br><span class="line">                <span class="built_in">Console</span>.WriteLine(<span class="string">"Temperature in Fahrenheit: &#123;0:F2&#125;"</span>, F);</span><br><span class="line">                <span class="built_in">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="built_in">case</span> <span class="string">"2"</span>:</span><br><span class="line">                <span class="built_in">Console</span>.Write(<span class="string">"Please enter the Fahrenheit temperature: "</span>);</span><br><span class="line">                C = TemperatureConverter.FahrenheitToCelsius(<span class="built_in">Console</span>.ReadLine());</span><br><span class="line">                <span class="built_in">Console</span>.WriteLine(<span class="string">"Temperature in Celsius: &#123;0:F2&#125;"</span>, C);</span><br><span class="line">                <span class="built_in">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="built_in">default</span>:</span><br><span class="line">                <span class="built_in">Console</span>.WriteLine(<span class="string">"Please select a convertor."</span>);</span><br><span class="line">                <span class="built_in">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Keep the console window open in debug mode.</span></span><br><span class="line">        <span class="built_in">Console</span>.WriteLine(<span class="string">"Press any key to exit."</span>);</span><br><span class="line">        <span class="built_in">Console</span>.ReadKey();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* Example Output:</span></span><br><span class="line"><span class="comment">    Please select the convertor direction</span></span><br><span class="line"><span class="comment">    1. From Celsius to Fahrenheit.</span></span><br><span class="line"><span class="comment">    2. From Fahrenheit to Celsius.</span></span><br><span class="line"><span class="comment">    :2</span></span><br><span class="line"><span class="comment">    Please enter the Fahrenheit temperature: 20</span></span><br><span class="line"><span class="comment">    Temperature in Celsius: -6.67</span></span><br><span class="line"><span class="comment">    Press any key to exit.</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="静态成员"><a href="#静态成员" class="headerlink" title="静态成员"></a>静态成员</h2><p>非静态类可以包含静态方法、字段、属性或事件。即使未创建类的任何实例，也可对类调用静态成员。</p>
+<h3 id="静态成员始终按类名（而不是实例名称）进行访问"><a href="#静态成员始终按类名（而不是实例名称）进行访问" class="headerlink" title="静态成员始终按类名（而不是实例名称）进行访问"></a>静态成员始终按类名（而不是实例名称）进行访问</h3><p> 静态成员只有一个副本存在（与创建的类的实例数有关）。</p>
+<h3 id="静态方法和属性无法在其包含类型中访问非静态字段和事件，它们无法访问任何对象的实例变量，除非在方法参数中显式传递它"><a href="#静态方法和属性无法在其包含类型中访问非静态字段和事件，它们无法访问任何对象的实例变量，除非在方法参数中显式传递它" class="headerlink" title="静态方法和属性无法在其包含类型中访问非静态字段和事件，它们无法访问任何对象的实例变量，除非在方法参数中显式传递它"></a>静态方法和属性无法在其包含类型中访问非静态字段和事件，它们无法访问任何对象的实例变量，除非在方法参数中显式传递它</h3><p><strong>更典型的做法是声明具有一些静态成员的非静态类（而不是将整个类都声明为静态）。</strong></p>
+<h2 id="静态字段用途"><a href="#静态字段用途" class="headerlink" title="静态字段用途"></a>静态字段用途</h2><p>静态字段的两个常见用途是保留已实例化的对象数的计数，或是存储必须在所有实例间共享的值。</p>
+<h3 id="静态方法可以进行重载，但不能进行替代，因为它们属于类，而不属于类的任何实例。"><a href="#静态方法可以进行重载，但不能进行替代，因为它们属于类，而不属于类的任何实例。" class="headerlink" title="静态方法可以进行重载，但不能进行替代，因为它们属于类，而不属于类的任何实例。"></a>静态方法可以进行重载，但不能进行替代，因为它们属于类，而不属于类的任何实例。</h3><h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li>不能声明为 static const</li>
+<li>const属于类型</li>
+<li>C#不支持静态局部变量(在方法范围中声明的变量)</li>
+<li>可在成员的返回类型之前使用 static 关键字声明静态类成员</li>
+<li>在首次访问静态成员之前以及在调用构造函数（如果有）之前，会初始化静态成员。</li>
+<li>访问静态类成员，请使用类的名称（而不是变量名称）指定成员的位置<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Automobile</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> NumberOfWheels = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> SizeOfGasTank</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">15</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Drive</span>(<span class="params"></span>)</span> &#123; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">event</span> EventType RunOutOfGas;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Other non-static fields and properties...</span></span><br><span class="line">    </span><br><span class="line">    Automobile.Dirve();</span><br><span class="line">    <span class="keyword">int</span> i = Automobile.NumberOfWheels;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>reference:<a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/classes-and-structs/static-classes-and-static-class-members" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/classes-and-structs/static-classes-and-static-class-members</a></p>
+</blockquote>
+<h1 id="params关键字"><a href="#params关键字" class="headerlink" title="params关键字"></a>params关键字</h1><p>指定采用数目可变的参数的方法参数。</p>
+<p>可以发送参数声明中所指定类型的逗号分隔的参数列表或指定类型的参数数组。 </p>
+<p>还可以不发送参数。 </p>
+<p>如果未发送任何参数，则 params 列表的长度为零。</p>
+<p>在方法声明中的 params 关键字之后不允许有任何其他参数，并且在方法声明中只允许有一个 params 关键字。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">User</span><span class="params">(params <span class="keyword">int</span>[] <span class="built_in">list</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;<span class="built_in">list</span>.length;i++)&#123;</span><br><span class="line">            Console.Write(<span class="built_in">list</span>[i] + <span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        Console.WirteLine();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">UserParams</span><span class="params">(params object[] <span class="built_in">list</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt; <span class="built_in">list</span>.length;i++)&#123;</span><br><span class="line">            Console.Wirte(<span class="built_in">list</span>[i]+ <span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span><span class="params">(<span class="built_in">string</span>[] args)</span></span>&#123;</span><br><span class="line">        <span class="comment">// You can send a comma-separated list of arguments of the </span></span><br><span class="line">        <span class="comment">// specified type.</span></span><br><span class="line">        User(<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">6</span>);</span><br><span class="line">        UserParams(<span class="number">1</span>,<span class="string">"ret"</span>,<span class="string">'a'</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// A params parameter accepts zero or more arguments.</span></span><br><span class="line">        <span class="comment">// The following calling statement displays only a blank line.</span></span><br><span class="line">        UseParams2();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// An array argument can be passed, as long as the array</span></span><br><span class="line">        <span class="comment">// type matches the parameter type of the method being called.</span></span><br><span class="line">        <span class="keyword">int</span>[] myIntArray = &#123; <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span> &#125;;</span><br><span class="line">        UseParams(myIntArray);</span><br><span class="line"></span><br><span class="line">        object[] myObjArray = &#123; <span class="number">2</span>, <span class="string">'b'</span>, <span class="string">"test"</span>, <span class="string">"again"</span> &#125;;</span><br><span class="line">        UseParams2(myObjArray);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// The following call causes a compiler error because the object</span></span><br><span class="line">        <span class="comment">// array cannot be converted into an integer array.</span></span><br><span class="line">        <span class="comment">//UseParams(myObjArray);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// The following call does not cause an error, but the entire </span></span><br><span class="line">        <span class="comment">// integer array becomes the first element of the params array.</span></span><br><span class="line">        UseParams2(myIntArray);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="ref-参数"><a href="#ref-参数" class="headerlink" title="ref(参数)"></a>ref(参数)</h1><p>ref 关键字通过引用（而非值）传递参数。</p>
+<p>通过引用传递的效果是，对所调用方法中的参数进行的任何更改都反映在调用方法中。</p>
+<p>例如，如果调用方传递本地变量表达式或数组元素访问表达式，所调用方法会将对象替换为 ref 参数引用的对象，然后调用方的本地变量或数组元素将开始引用新对象。</p>
+<blockquote>
+<p>note </p>
+<p>不要混淆通过引用传递的概念与引用类型的概念。 这两种概念是不同的。 无论方法参数是值类型还是引用类型，均可由 ref 修改。 当通过引用传递时，不会对值类型装箱。</p>
+</blockquote>
+<p><strong>如果要使用ref参数，方法定义和调用方法均必须显式使用ref关键字</strong></p>
+<p><strong>传递到 ref 形参的实参必须先经过初始化，然后才能传递。 这与 out 形参不同，在传递之前，不需要显式初始化该形参的实参。</strong></p>
+<p>类的成员不能具有仅在 ref 和 out 方面不同的签名。 如果类型的两个成员之间的唯一区别在于其中一个具有 ref 参数，而另一个具有 out 参数，则会发生编译错误。 例如，以下代码将不会编译。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">RefExample</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Method</span>(<span class="params"><span class="keyword">ref</span> <span class="keyword">int</span> i</span>)</span>&#123;</span><br><span class="line">        i = i + <span class="number">4</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">int</span> val = <span class="number">1</span>;</span><br><span class="line">        Method(<span class="keyword">ref</span> val);</span><br><span class="line">        Console.WriteLine(val);</span><br><span class="line">        <span class="comment">//Output 45;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">CS0663_Example</span>&#123;</span><br><span class="line">    <span class="comment">//Compiler error CS0633:"can't define overloading "</span></span><br><span class="line">    <span class="comment">//methods that differ only on out and out."</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SampleMethod</span>(<span class="params"><span class="keyword">out</span> <span class="keyword">int</span> i</span>)</span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SampleMethod</span>(<span class="params"><span class="keyword">ref</span> <span class="keyword">int</span> i</span>)</span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当一个方法具有 ref 或 out 参数，另一个方法具有值参数时，则可以完成重载</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">REfOverloadExample</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SampleMethod</span>(<span class="params"><span class="keyword">int</span> i</span>)</span>&#123;&#125;;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SampleMethod</span>(<span class="params"><span class="keyword">ref</span> <span class="keyword">int</span> i</span>)</span>&#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="注意事项-1"><a href="#注意事项-1" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>在其他要求签名匹配的情况下（如隐藏或重写），ref 和 out 是签名的一部分，相互之间不匹配。</li>
+<li>不能讲ref 或者 out关键字用于以下几种方法。<ul>
+<li>异步方法。通过使用async 修饰符修饰</li>
+<li>迭代器方法。 包括 yield return 或者yield break</li>
+</ul>
+</li>
+<li>传递数组。<ul>
+<li>reference 使用out 和 ref 传递数组</li>
+</ul>
+</li>
+</ul>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">RefExample</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">// Declare an instance of Product and display its initial values.</span></span><br><span class="line">        Product item = <span class="keyword">new</span> Product(<span class="string">"Fasteners"</span>, <span class="number">54321</span>);</span><br><span class="line">        System.Console.WriteLine(<span class="string">"Original values in Main.  Name: &#123;0&#125;, ID: &#123;1&#125;\n"</span>,</span><br><span class="line">            item.ItemName, item.ItemID);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Pass the product instance to ChangeByReference.</span></span><br><span class="line">        ChangeByReference(<span class="keyword">ref</span> item);</span><br><span class="line">        System.Console.WriteLine(<span class="string">"Back in Main.  Name: &#123;0&#125;, ID: &#123;1&#125;\n"</span>,</span><br><span class="line">            item.ItemName, item.ItemID);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ChangeByReference</span>(<span class="params"><span class="keyword">ref</span> Product itemRef</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="comment">// Change the address that is stored in the itemRef parameter.   </span></span><br><span class="line">        itemRef = <span class="keyword">new</span> Product(<span class="string">"Stapler"</span>, <span class="number">99999</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// You can change the value of one of the properties of</span></span><br><span class="line">        <span class="comment">// itemRef. The change happens to item in Main as well.</span></span><br><span class="line">        itemRef.ItemID = <span class="number">12345</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Product</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Product</span>(<span class="params"><span class="keyword">string</span> name, <span class="keyword">int</span> newID</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        ItemName = name;</span><br><span class="line">        ItemID = newID;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> ItemName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> ItemID &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Output: </span></span><br><span class="line"><span class="comment">//        Original values in Main.  Name: Fasteners, ID: 54321</span></span><br><span class="line"><span class="comment">//    </span></span><br><span class="line"><span class="comment">//        Back in Main.  Name: Stapler, ID: 12345</span></span><br></pre></td></tr></table></figure>
+<h1 id="out-关键字"><a href="#out-关键字" class="headerlink" title="out 关键字"></a>out 关键字</h1><p>out使用引用传递参数。和ref关键字相似，只是ref要初始化变量。方法定义和方法使用都要使用out。</p>
+<blockquote>
+<p>out 关键字也可以与泛型类型参数结合使用，以指定该类型参数是协变参数。</p>
+</blockquote>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">OutExample</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Method</span>(<span class="params"><span class="keyword">out</span> <span class="keyword">int</span> i</span>)</span></span><br><span class="line"><span class="function"></span>   &#123;</span><br><span class="line">      i = <span class="number">44</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>   &#123;</span><br><span class="line">      <span class="keyword">int</span> <span class="keyword">value</span>;</span><br><span class="line">      Method(<span class="keyword">out</span> <span class="keyword">value</span>);</span><br><span class="line">      Console.WriteLine(<span class="keyword">value</span>);     <span class="comment">// value is now 44</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其他功能和ref差不多</p>
+<h2 id="调用具有out-参数的方法"><a href="#调用具有out-参数的方法" class="headerlink" title="调用具有out 参数的方法"></a>调用具有out 参数的方法</h2><blockquote>
+<p>reference :<a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/keywords/out-parameter-modifier#calling-a-method-with-an-out-argument" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/keywords/out-parameter-modifier#calling-a-method-with-an-out-argument</a></p>
+</blockquote>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/08/02/Csharp 知识点 part 3（协变和逆变）/" data-toggle="tooltip" data-placement="top" title="C# 知识点 part 3（协变和逆变）">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/08/02/Csharp-lambda/" data-toggle="tooltip" data-placement="top" title="C# （lambda表达式）">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#csharp" title="csharp">csharp</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Moloach&#39;s Blog 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> 
+                    <!-- <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!--<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

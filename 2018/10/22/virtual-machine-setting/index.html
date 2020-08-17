@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="分享自己的一些学习笔记！">
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          virtual machine setting - moloach的博客 | moloach&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2018/10/22/virtual-machine-setting/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Moloach&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/paul-gilmore.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#linux centos" title="linux centos">linux centos</a>
+                        
+                    </div>
+                    <h1>virtual machine setting</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by moloach on
+                        2018-10-22
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="新建一台虚拟机"><a href="#新建一台虚拟机" class="headerlink" title="新建一台虚拟机"></a>新建一台虚拟机</h1><h2 id="1-在虚拟机管理平台选择硬件"><a href="#1-在虚拟机管理平台选择硬件" class="headerlink" title="1. 在虚拟机管理平台选择硬件"></a>1. 在虚拟机管理平台选择硬件</h2><h3 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h3><p>文件保存的硬盘</p>
+<h3 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h3><p>显示的是已经创建的虚拟机及其状态</p>
+<h4 id="创建新的虚拟机"><a href="#创建新的虚拟机" class="headerlink" title="创建新的虚拟机"></a>创建新的虚拟机</h4><ol>
+<li>点击“创建/注册虚拟机” -&gt; “创建新虚拟机”</li>
+<li>填写虚拟机唯一名称 -&gt; 选择对应的操作系统</li>
+<li>选择存储的位置</li>
+<li>选择对应的硬件<ul>
+<li>一般只要选择CPU, 内存, 硬盘大小即可，其他设置无需改动</li>
+<li>选择对应的系统镜像文件</li>
+</ul>
+</li>
+<li>记得选择相应的Network Adapter</li>
+</ol>
+<h2 id="系统安装"><a href="#系统安装" class="headerlink" title="系统安装"></a>系统安装</h2><p>创建好虚拟机之后，刷新页面即可显示新建的虚拟机， 点击播放即可进入，第一次需要进行安装</p>
+<h3 id="系统初始化设置"><a href="#系统初始化设置" class="headerlink" title="系统初始化设置"></a>系统初始化设置</h3><ol>
+<li>设置时区，选择东八区“shanghai”，语言选择英语</li>
+<li>设置硬盘分区， 自定义分区，分成三个区 分别为<ul>
+<li>/</li>
+<li>swap</li>
+<li>/boot</li>
+</ul>
+</li>
+<li>系统会默认分区，注意分配的磁盘是否全部用完</li>
+<li>选择最小化安装，并且加上对应的开发工作</li>
+<li>在系统安装的时候设置对应的root用户及普通用户(<code>此处需要勾选普通用户有管理员权限</code>)</li>
+<li>安装完成后重启系统</li>
+</ol>
+<h2 id="系统设置"><a href="#系统设置" class="headerlink" title="系统设置"></a>系统设置</h2><p>完成之后打开对应的控制台，输入设置的帐号和密码即可进入系统</p>
+<h3 id="设置固定ip"><a href="#设置固定ip" class="headerlink" title="设置固定ip"></a>设置固定ip</h3><h4 id="1-临时性设置ip"><a href="#1-临时性设置ip" class="headerlink" title="1. 临时性设置ip"></a>1. 临时性设置ip</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ifconfig <span class="comment">#查看网卡信息，此处网卡假设为ens160</span></span><br><span class="line">ifconfig ens160 &lt;ipaddress&gt;</span><br><span class="line">ifcfg ens160 add &lt;ipaddress&gt;</span><br></pre></td></tr></table></figure>
+<p>注意，这只能临时性更改IP</p>
+<h4 id="2-配置静态IP文件"><a href="#2-配置静态IP文件" class="headerlink" title="2. 配置静态IP文件"></a>2. 配置静态IP文件</h4><p>配置文件位置：<code>/etc/sysconfig/network-scripts/ifcfg-ens160</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">BOOTPROTO=static</span><br><span class="line">ONBOOT=yes</span><br><span class="line">IPADDR=10.134.149.135</span><br><span class="line">GATEWAY=10.134.149.1</span><br><span class="line">NETMASK=255.255.255.0</span><br><span class="line">DNS1=10.130.136.111</span><br><span class="line">DNS2=10.134.248.35</span><br></pre></td></tr></table></figure></p>
+<h3 id="设置http代理"><a href="#设置http代理" class="headerlink" title="设置http代理"></a>设置http代理</h3><h4 id="1-yum-代理"><a href="#1-yum-代理" class="headerlink" title="1. yum 代理"></a>1. yum 代理</h4><p>配置文件：  <code>/etc/yum.conf</code><br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxy=<span class="string">http:</span><span class="comment">//10.134.149.32:8118</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="2-全局代理"><a href="#2-全局代理" class="headerlink" title="2. 全局代理"></a>2. 全局代理</h4><p>配置文件： <code>/etc/profile</code><br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http_proxy=<span class="string">"http://10.134.149.32:8118"</span></span><br><span class="line"><span class="keyword">export</span> http_proxy</span><br><span class="line">https_proxy=<span class="string">"https://10.134.149.32:8118"</span></span><br><span class="line"><span class="keyword">export</span> https_proxy</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-sssh远程执行代理配置"><a href="#3-sssh远程执行代理配置" class="headerlink" title="3. sssh远程执行代理配置"></a>3. sssh远程执行代理配置</h4><p>配置文件：<code>~/.bashrc</code><br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http_proxy=<span class="string">"http://10.134.149.32:8118"</span></span><br><span class="line"><span class="keyword">export</span> http_proxy</span><br><span class="line">https_proxy=<span class="string">"https://10.134.149.32:8118"</span></span><br><span class="line"><span class="keyword">export</span> https_proxy</span><br></pre></td></tr></table></figure></p>
+<h3 id="设置-ntp时间校准服务配置"><a href="#设置-ntp时间校准服务配置" class="headerlink" title="设置 ntp时间校准服务配置"></a>设置 ntp时间校准服务配置</h3><h4 id="1-安装-ntp-ntpdate-ntp-doc"><a href="#1-安装-ntp-ntpdate-ntp-doc" class="headerlink" title="1.安装 ntp ntpdate ntp-doc"></a>1.安装 <code>ntp ntpdate ntp-doc</code></h4><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install<span class="built_in"> ntp </span>ntpdate ntp-doc -y</span><br></pre></td></tr></table></figure>
+<h4 id="2-ntp-server配置"><a href="#2-ntp-server配置" class="headerlink" title="2.ntp server配置"></a>2.ntp server配置</h4><p>配置文件： <code>/etc/ntp.conf</code><br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#配置上级ntp同步地址</span></span><br><span class="line">server 10.191.131.131</span><br><span class="line">server 10.191.130.130</span><br><span class="line"></span><br><span class="line"><span class="comment">#将时间服务器配置为本地时间</span></span><br><span class="line">server 127.127.1.0</span><br><span class="line">fudge 127.127.1.0 stratum 0</span><br><span class="line"></span><br><span class="line"><span class="comment">#允许客户端连接这台服务器以同步时间 单不允许修改配置</span></span><br><span class="line">restrict 0.0.0.0 mask 0.0.0.0 nomodify notrap</span><br></pre></td></tr></table></figure></p>
+<h5 id="时间同步"><a href="#时间同步" class="headerlink" title="时间同步"></a>时间同步</h5><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#测试时间服务器是否可用</span><br><span class="line"><span class="selector-id">#ntpdate</span> <span class="selector-tag">-q</span> 10<span class="selector-class">.134</span><span class="selector-class">.149</span><span class="selector-class">.135</span></span><br><span class="line"><span class="selector-tag">ntpdate</span> <span class="selector-tag">-q</span> 10<span class="selector-class">.191</span><span class="selector-class">.131</span><span class="selector-class">.131</span></span><br><span class="line">#与服务器同步</span><br><span class="line"><span class="selector-tag">ntpdate</span> 10<span class="selector-class">.191</span><span class="selector-class">.131</span><span class="selector-class">.131</span></span><br></pre></td></tr></table></figure>
+<h5 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="keyword">start</span> ntpd</span><br><span class="line">systemctl <span class="keyword">enable</span> ntpd <span class="comment">#开机启动</span></span><br><span class="line">systemctl <span class="keyword">status</span> ntpd</span><br><span class="line"></span><br><span class="line">ntpq -p <span class="comment">#查看时间服务器状态ntpda</span></span><br><span class="line"></span><br><span class="line">timedatectl <span class="comment">#查看同步状态</span></span><br></pre></td></tr></table></figure>
+<h5 id="ntp客户端配置"><a href="#ntp客户端配置" class="headerlink" title="ntp客户端配置"></a>ntp客户端配置</h5><h5 id="时区设置"><a href="#时区设置" class="headerlink" title="时区设置"></a>时区设置</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">查看支持的时区</span></span><br><span class="line">timedatectl list-timezones</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">设置时区</span></span><br><span class="line">timedatectl set-timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
+<h5 id="防火墙配置"><a href="#防火墙配置" class="headerlink" title="防火墙配置"></a>防火墙配置</h5><p>开放123端口的udp连接<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --add-service=ntp --permanent</span></span><br><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --reload</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="安装rpm包"><a href="#安装rpm包" class="headerlink" title="安装rpm包"></a>安装rpm包</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm   -ivh   package<span class="selector-class">.ix86</span><span class="selector-class">.rpm</span></span><br></pre></td></tr></table></figure>
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/03/07/协议及其相关/" data-toggle="tooltip" data-placement="top" title="HTTPS协议及其相关">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/10/04/reserve-ports/" data-toggle="tooltip" data-placement="top" title="端口保留">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#linux centos" title="linux centos">linux centos</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Moloach&#39;s Blog 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> 
+                    <!-- <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!--<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

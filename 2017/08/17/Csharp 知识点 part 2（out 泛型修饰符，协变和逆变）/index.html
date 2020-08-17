@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="分享自己的一些学习笔记！">
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          C# 知识点 part 2（out 泛型修饰符，协变和逆变） - moloach的博客 | moloach&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2017/08/17/Csharp 知识点 part 2（out 泛型修饰符，协变和逆变）/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Moloach&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/paul-gilmore.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#csharp" title="csharp">csharp</a>
+                        
+                    </div>
+                    <h1>C# 知识点 part 2（out 泛型修饰符，协变和逆变）</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by moloach on
+                        2017-08-17
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="out-泛型修饰符-指定类型参数是协变的"><a href="#out-泛型修饰符-指定类型参数是协变的" class="headerlink" title="out(泛型修饰符)-指定类型参数是协变的"></a>out(泛型修饰符)-指定类型参数是协变的</h1><p>对于泛型类型参数，out 关键字可指定类型参数是协变的。 可以在泛型接口和委托中使用 out 关键字。</p>
+<p>协变使你使用的类型可以比泛型参数指定的类型派生程度更大。 这样可以隐式转换实现变体接口的类以及隐式转换委托类型。 引用类型支持协变和逆变，但值类型不支持它们。</p>
+<p>具有协变类型参数的接口使其方法返回的类型可以比类型参数指定的类型派生程度更大。 例如，因为在 .NET Framework 4 的 IEnumerable<t> 中，类型 T 是协变的，所以可以将 IEnumerabe(Of String) 类型的对象分配给 IEnumerable(Of Object) 类型的对象，而无需使用任何特殊转换方法。</t></p>
+<p>可以向协变委托分配相同类型的其他委托，不过要使用派生程度更大的泛型类型参数。</p>
+<p>有关详细信息，请参阅协变和逆变。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Covariant interface.协变接口</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ICovariant</span>&lt;<span class="title">out</span> <span class="title">R</span>&gt; </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Extending covariant interface.扩展协变接口</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IExtCovariant</span>&lt;<span class="title">out</span> <span class="title">R</span>&gt; : <span class="title">ICovariant</span>&lt;<span class="title">R</span>&gt; </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Implementing covariant interface.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sample</span>&lt;<span class="title">R</span>&gt; : <span class="title">ICovariant</span>&lt;<span class="title">R</span>&gt; </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Program</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">void</span> Test()</span><br><span class="line">    &#123;</span><br><span class="line">        ICovariant&lt;<span class="built_in">Object</span>&gt; iobj = <span class="keyword">new</span> Sample&lt;<span class="built_in">Object</span>&gt;();</span><br><span class="line">        ICovariant&lt;<span class="built_in">String</span>&gt; istr = <span class="keyword">new</span> Sample&lt;<span class="built_in">String</span>&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// You can assign istr to iobj because</span></span><br><span class="line">        <span class="comment">// the ICovariant interface is covariant.</span></span><br><span class="line">        iobj = istr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>类型参数满足一下条件，则可以声明为协变：</p>
+<ul>
+<li>类型参数只用作接口方法的返回类型，而不用做方法参数的类型<ul>
+<li>note：</li>
+<li>如果在协变接口中将逆变泛型委托用作方法参数，则可以将协变类型用作此委托的泛型类型参数。(例外)</li>
+</ul>
+</li>
+<li>类型参数不用做接口方法的泛型约束。</li>
+</ul>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><p>如何声明、实例化和调用协变泛型委托。</p>
+<p>如何隐性转换委托类型。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Covariant delegate.</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">delegate</span> R DCovariant&lt;<span class="keyword">out</span> R&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Methods that match the delegate signature.</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Control <span class="title">SampleControl</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123; <span class="keyword">return</span> <span class="keyword">new</span> Control(); &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Button <span class="title">SampleButton</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123; <span class="keyword">return</span> <span class="keyword">new</span> Button(); &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Test</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;            </span><br><span class="line">    <span class="comment">// Instantiate the delegates with the methods.</span></span><br><span class="line">    DCovariant&lt;Control&gt; dControl = SampleControl;</span><br><span class="line">    DCovariant&lt;Button&gt; dButton = SampleButton;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// You can assign dButton to dControl</span></span><br><span class="line">    <span class="comment">// because the DCovariant delegate is covariant.</span></span><br><span class="line">    dControl = dButton;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Invoke the delegate.</span></span><br><span class="line">    dControl(); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="协变和逆变-Covariance-Contravariance"><a href="#协变和逆变-Covariance-Contravariance" class="headerlink" title="协变和逆变(Covariance Contravariance)"></a>协变和逆变(Covariance Contravariance)</h1><p>可以对数组，委托，泛型类型进行隐性的引用转换。</p>
+<p>本质上是一种检查类型的转换。</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// <span class="type">Assignment</span> compatibility.   </span><br><span class="line"><span class="built_in">string</span> str = <span class="string">"test"</span>;  </span><br><span class="line">// <span class="type">An</span> <span class="keyword">object</span> <span class="keyword">of</span> a more derived <span class="keyword">type</span> <span class="keyword">is</span> assigned to an <span class="keyword">object</span> <span class="keyword">of</span> a less derived <span class="keyword">type</span>.   </span><br><span class="line"><span class="keyword">object</span> obj = str;  </span><br><span class="line"></span><br><span class="line">// <span class="type">Covariance</span>.   </span><br><span class="line"><span class="type">IEnumerable</span>&lt;<span class="built_in">string</span>&gt; strings = new <span class="type">List</span>&lt;<span class="built_in">string</span>&gt;();  </span><br><span class="line">// <span class="type">An</span> <span class="keyword">object</span> that <span class="keyword">is</span> instantiated <span class="keyword">with</span> a more derived <span class="keyword">type</span> argument   </span><br><span class="line">// <span class="keyword">is</span> assigned to an <span class="keyword">object</span> instantiated <span class="keyword">with</span> a less derived <span class="keyword">type</span> argument.   </span><br><span class="line">// <span class="type">Assignment</span> compatibility <span class="keyword">is</span> preserved.   </span><br><span class="line"><span class="type">IEnumerable</span>&lt;<span class="keyword">object</span>&gt; objects = strings;  </span><br><span class="line"></span><br><span class="line">// <span class="type">Contravariance</span>.             </span><br><span class="line">// <span class="type">Assume</span> that the following <span class="keyword">method</span> <span class="keyword">is</span> <span class="keyword">in</span> the class:   </span><br><span class="line">// <span class="keyword">static</span> <span class="built_in">void</span> <span class="type">SetObject</span>(<span class="keyword">object</span> o) &#123; &#125;   </span><br><span class="line"><span class="type">Action</span>&lt;<span class="keyword">object</span>&gt; actObject = <span class="type">SetObject</span>;  </span><br><span class="line">// <span class="type">An</span> <span class="keyword">object</span> that <span class="keyword">is</span> instantiated <span class="keyword">with</span> a less derived <span class="keyword">type</span> argument   </span><br><span class="line">// <span class="keyword">is</span> assigned to an <span class="keyword">object</span> instantiated <span class="keyword">with</span> a more derived <span class="keyword">type</span> argument.   </span><br><span class="line">// <span class="type">Assignment</span> compatibility <span class="keyword">is</span> reversed.   </span><br><span class="line"><span class="type">Action</span>&lt;<span class="built_in">string</span>&gt; actString = actObject;</span><br></pre></td></tr></table></figure>
+<p>对数组的协变是一种可以产生更多派生类型的数组的隐性转换。</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">object[]<span class="built_in"> array </span>=<span class="built_in"> new </span>String[10];</span><br><span class="line">// the following statement produces a run-time expection.</span><br><span class="line">//array[0] = 10;</span><br></pre></td></tr></table></figure>
+<p> 协变和逆变在函数组中的使用<br> <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">static</span> <span class="keyword">object</span> <span class="title">GetObject</span>(<span class="params"></span>)</span> &#123; <span class="keyword">return</span> <span class="literal">null</span>; &#125;  </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SetObject</span>(<span class="params"><span class="keyword">object</span> obj</span>)</span> &#123; &#125;  </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">string</span> <span class="title">GetString</span>(<span class="params"></span>)</span> &#123; <span class="keyword">return</span> <span class="string">""</span>; &#125;  </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SetString</span>(<span class="params"><span class="keyword">string</span> str</span>)</span> &#123; &#125;  </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Test</span>(<span class="params"></span>)  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    <span class="comment">// Covariance. A delegate specifies a return type as object,  </span></span><br><span class="line">    <span class="comment">// but you can assign a method that returns a string.  </span></span><br><span class="line">    Func&lt;<span class="keyword">object</span>&gt; del = GetString;  </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Contravariance. A delegate specifies a parameter type as string,  </span></span><br><span class="line">    <span class="comment">// but you can assign a method that takes an object.  </span></span><br><span class="line">    Action&lt;<span class="keyword">string</span>&gt; del2 = SetObject;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="创建变体泛型接口"><a href="#创建变体泛型接口" class="headerlink" title="创建变体泛型接口"></a>创建变体泛型接口</h1><p>接口中的泛型类型参数可以声明为协变或逆变。</p>
+<p>协变允许接口方法具有与泛型类型参数定义的返回类型相比，派生程度更大的返回类型。</p>
+<p>逆变允许接口方法具有与泛型形参指定的实参类型相比，派生程度更小的实参类型。 </p>
+<p>具有协变或逆变泛型类型参数的泛型接口称为“变体”。</p>
+<h2 id="声明变体泛型接口"><a href="#声明变体泛型接口" class="headerlink" title="声明变体泛型接口"></a>声明变体泛型接口</h2><p>可通过对泛型类型参数使用 in 和 out 关键字来声明变体泛型接口。</p>
+<h3 id="注意事项-1"><a href="#注意事项-1" class="headerlink" title="注意事项"></a>注意事项</h3><p>ref 和 out 参数不能为变体，值类型也不能为变体。</p>
+<h4 id="可以使用-out-关键字将泛型类型参数声明为协变。"><a href="#可以使用-out-关键字将泛型类型参数声明为协变。" class="headerlink" title="可以使用 out 关键字将泛型类型参数声明为协变。"></a>可以使用 out 关键字将泛型类型参数声明为协变。</h4><p>协变类型必须满足以下条件：</p>
+<ul>
+<li><p>可以使用 out 关键字将泛型类型参数声明为协变。 协变类型必须满足以下条件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ICovariant</span>&lt;<span class="title">out</span> <span class="title">R</span>&gt;  </span></span><br><span class="line"><span class="class"></span>&#123;  </span><br><span class="line">    <span class="function">R <span class="title">GetSomething</span><span class="params">()</span></span>;  </span><br><span class="line">    <span class="comment">// The following statement generates a compiler error.  </span></span><br><span class="line">    <span class="comment">// void SetSometing(R sampleArg);  </span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>类型不用作接口方法的泛型约束。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ICovariant</span>&lt;<span class="title">out</span> <span class="title">R</span>&gt;  </span></span><br><span class="line"><span class="class"></span>&#123;  </span><br><span class="line">    <span class="comment">// The following statement generates a compiler error  </span></span><br><span class="line">    <span class="comment">// because you can use only contravariant or invariant types  </span></span><br><span class="line">    <span class="comment">// in generic contstraints.  </span></span><br><span class="line">    <span class="comment">// void DoSomething&lt;T&gt;() where T : R;  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="可以使用-in-关键字将泛型类型参数声明为逆变。"><a href="#可以使用-in-关键字将泛型类型参数声明为逆变。" class="headerlink" title="可以使用 in 关键字将泛型类型参数声明为逆变。"></a>可以使用 in 关键字将泛型类型参数声明为逆变。</h4><p>逆变类型只能用作方法参数的类型，不能用作接口方法的返回类型。 逆变类型还可用于泛型约束。 以下代码演示如何声明逆变接口，以及如何将泛型约束用于其方法之一。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IContravariant</span>&lt;<span class="title">in</span> <span class="title">A</span>&gt;  </span></span><br><span class="line"><span class="class">&#123;</span>  </span><br><span class="line">    <span class="keyword">void</span> SetSomething(A sampleArg);  </span><br><span class="line">    <span class="keyword">void</span> DoSomething&lt;T&gt;() where <span class="string">T :</span> A;  </span><br><span class="line">    <span class="comment">// The following statement generates a compiler error.  </span></span><br><span class="line">    <span class="comment">// A GetSomething();              </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="还可以在同一接口中同时支持协变和逆变，但需应用于不同类型参数。"><a href="#还可以在同一接口中同时支持协变和逆变，但需应用于不同类型参数。" class="headerlink" title="还可以在同一接口中同时支持协变和逆变，但需应用于不同类型参数。"></a>还可以在同一接口中同时支持协变和逆变，但需应用于不同类型参数。</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IVariant</span>&lt;<span class="title">out</span> <span class="title">R</span>, <span class="title">in</span> <span class="title">A</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function">R <span class="title">GetSomething</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Void <span class="title">SetSomething</span><span class="params">(A sampleArg)</span></span>;</span><br><span class="line">    <span class="function">R <span class="title">SetSomething</span><span class="params">(R sampleArg)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实现变体泛型接口"><a href="#实现变体泛型接口" class="headerlink" title="实现变体泛型接口"></a>实现变体泛型接口</h2><p>在类中实现变体泛型接口时，所用语法和固定接口的语法相同。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ICovariant</span>&lt;<span class="type">out R</span>&gt;</span>&#123;</span><br><span class="line">    R GetSomething();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SampleImplementation</span>&lt;<span class="type">R</span>&gt;:<span class="type">ICovariant</span>&lt;<span class="type">R</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> R GetSomething()&#123;</span><br><span class="line">        <span class="comment">//some code.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">default</span>(R);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实现变体接口的类是固定类。</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The interface is covariant.  </span></span><br><span class="line">ICovariant<span class="params">&lt;Button&gt;</span> ibutton = new SampleImplementation<span class="params">&lt;Button&gt;</span>();  </span><br><span class="line">ICovariant<span class="params">&lt;Object&gt;</span> iobj = ibutton;  </span><br><span class="line"></span><br><span class="line"><span class="comment">// The class is invariant.  </span></span><br><span class="line">SampleImplementation<span class="params">&lt;Button&gt;</span> button = new SampleImplementation<span class="params">&lt;Button&gt;</span>();  </span><br><span class="line"><span class="comment">// The following statement generates a compiler error  </span></span><br><span class="line"><span class="comment">// because classes are invariant.  </span></span><br><span class="line"><span class="comment">// SampleImplementation&lt;Object&gt; obj = button;</span></span><br></pre></td></tr></table></figure>
+<h2 id="扩展变体泛型接口"><a href="#扩展变体泛型接口" class="headerlink" title="扩展变体泛型接口"></a>扩展变体泛型接口</h2><p>扩展变体泛型接口时，必须使用 in 和 out 关键字来显式指定派生接口是否支持变体。 编译器不会根据正在扩展的接口来推断变体。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface ICovariant&lt;out T&gt; &#123; &#125;  </span><br><span class="line">interface IInvariant&lt;T&gt; : ICovariant&lt;T&gt; &#123; &#125;  </span><br><span class="line">interface IExtCovariant&lt;out T&gt; : ICovariant&lt;T&gt; &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>尽管 IInvariant<t> 接口和 IExtCovariant<out t> 接口扩展的是同一个接口，但泛型类型参数 T 在前者中为固定参数，在后者中为协变参数。 此规则也适用于逆变泛型类型参数。</out></t></p>
+<p>无论泛型类型参数 T 在接口中是协变还是逆变，都可以创建一个接口来扩展这两类接口，只要在扩展接口中，该 T 泛型类型参数为固定参数。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface ICovariant&lt;out T&gt; &#123; &#125;  </span><br><span class="line">interface IContravariant&lt;<span class="keyword">in</span> T&gt; &#123; &#125;  </span><br><span class="line">interface IInvariant&lt;T&gt; : ICovariant&lt;T&gt;, IContravariant&lt;T&gt; &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果泛型类型参数 T 在一个接口中声明为协变，则无法在扩展接口中将其声明为逆变，反之亦然。<br><figure class="highlight capnproto"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ICovariant</span>&lt;out T&gt; </span>&#123; &#125;  </span><br><span class="line">// The following statement generates a compiler error.  </span><br><span class="line">// <span class="class"><span class="keyword">interface</span> <span class="title">ICoContraVariant</span>&lt;in T&gt; : ICovariant&lt;T&gt; </span>&#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="避免多义性"><a href="#避免多义性" class="headerlink" title="避免多义性"></a>避免多义性</h3><p>如果在一个类中使用不同的泛型类型参数来显式实现同一变体泛型接口，便会产生多义性。 在这种情况下，编译器不会产生错误，但未指定将在运行时选择哪个接口实现。 这可能导致代码中出现微妙的 bug。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Simple class hierarchy.  </span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123; &#125;  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> : <span class="type">Animal &#123; &#125;  </span></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> : <span class="type">Animal &#123; &#125;  </span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// This class introduces ambiguity  </span></span><br><span class="line"><span class="comment">// because IEnumerable&lt;out T&gt; is covariant.  </span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pets</span> : <span class="type">IEnumerable</span>&lt;<span class="type">Cat</span>&gt;, <span class="type">IEnumerable</span>&lt;<span class="type">Dog</span>&gt;  </span></span><br><span class="line">&#123;  </span><br><span class="line">    IEnumerator&lt;Cat&gt; IEnumerable&lt;Cat&gt;.GetEnumerator()  </span><br><span class="line">    &#123;  </span><br><span class="line">        Console.WriteLine(<span class="string">"Cat"</span>);  </span><br><span class="line">        <span class="comment">// Some code.  </span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    IEnumerator IEnumerable.GetEnumerator()  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="comment">// Some code.  </span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    IEnumerator&lt;Dog&gt; IEnumerable&lt;Dog&gt;.GetEnumerator()  </span><br><span class="line">    &#123;  </span><br><span class="line">        Console.WriteLine(<span class="string">"Dog"</span>);  </span><br><span class="line">        <span class="comment">// Some code.  </span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Program</span>  </span></span><br><span class="line">&#123;  </span><br><span class="line">    <span class="keyword">public</span> static void Test()  </span><br><span class="line">    &#123;  </span><br><span class="line">        IEnumerable&lt;Animal&gt; pets = new Pets();  </span><br><span class="line">        pets.GetEnumerator();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此示例中，没有指定 pets.GetEnumerator 方法如何在 Cat 和 Dog 之间选择。 这可能导致代码中出现问题。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/08/18/csharp-reflection/" data-toggle="tooltip" data-placement="top" title="C#知识-反射">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/08/02/Csharp (using, 延迟初始化)/" data-toggle="tooltip" data-placement="top" title="C# (using, 延迟初始化)">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#csharp" title="csharp">csharp</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Moloach&#39;s Blog 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> 
+                    <!-- <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!--<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

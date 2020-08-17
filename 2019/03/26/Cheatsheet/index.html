@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="分享自己的一些学习笔记！">
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          Quick SQL Cheatsheet - moloach的博客 | moloach&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2019/03/26/Cheatsheet/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Moloach&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/paul-gilmore.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#sql" title="sql">sql</a>
+                        
+                    </div>
+                    <h1>Quick SQL Cheatsheet</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by moloach on
+                        2019-03-26
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="Quick-SQL-Cheatsheet"><a href="#Quick-SQL-Cheatsheet" class="headerlink" title="Quick SQL Cheatsheet"></a>Quick SQL Cheatsheet</h1><p>A quick reminder of all relevant SQL queries and examples on how to use them. </p>
+<h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><ol>
+<li><a href="#find"> Finding Data Queries. </a></li>
+<li><a href="#modify"> Data Modification Queries. </a></li>
+<li><a href="#report"> Reporting Queries. </a></li>
+<li><a href="#joins"> Join Queries. </a></li>
+</ol>
+<p><a name="find"></a></p>
+<h1 id="1-Finding-Data-Queries"><a href="#1-Finding-Data-Queries" class="headerlink" title="1. Finding Data Queries"></a>1. Finding Data Queries</h1><h3 id="SELECT-used-to-select-data-from-a-database"><a href="#SELECT-used-to-select-data-from-a-database" class="headerlink" title="SELECT: used to select data from a database"></a><strong>SELECT</strong>: used to select data from a database</h3><ul>
+<li><code>SELECT</code> * <code>FROM</code> table_name;</li>
+</ul>
+<h3 id="DISTINCT-filters-away-duplicate-values-and-returns-rows-of-specified-column"><a href="#DISTINCT-filters-away-duplicate-values-and-returns-rows-of-specified-column" class="headerlink" title="DISTINCT: filters away duplicate values and returns rows of specified column"></a><strong>DISTINCT</strong>: filters away duplicate values and returns rows of specified column</h3><ul>
+<li><code>SELECT DISTINCT</code> column_name;</li>
+</ul>
+<h3 id="WHERE-used-to-filter-records-rows"><a href="#WHERE-used-to-filter-records-rows" class="headerlink" title="WHERE: used to filter records/rows"></a><strong>WHERE</strong>: used to filter records/rows</h3><ul>
+<li><code>SELECT</code> column1, column2 <code>FROM</code> table_name <code>WHERE</code> condition;</li>
+<li><code>SELECT</code> * <code>FROM</code> table_name <code>WHERE</code> condition1 <code>AND</code> condition2;</li>
+<li><code>SELECT</code> * <code>FROM</code> table_name <code>WHERE</code> condition1 <code>OR</code> condition2;</li>
+<li><code>SELECT</code> * <code>FROM</code> table_name <code>WHERE NOT</code> condition;</li>
+<li><code>SELECT</code> * <code>FROM</code> table_name <code>WHERE</code> condition1 <code>AND</code> (condition2 <code>OR</code> condition3);</li>
+</ul>
+<h3 id="ORDER-BY-used-to-sort-the-result-set-in-ascending-or-descending-order"><a href="#ORDER-BY-used-to-sort-the-result-set-in-ascending-or-descending-order" class="headerlink" title="ORDER BY: used to sort the result-set in ascending or descending order"></a><strong>ORDER BY</strong>: used to sort the result-set in ascending or descending order</h3><ul>
+<li><code>SELECT</code> * <code>FROM</code> table_name <code>ORDER BY</code> column;</li>
+<li><code>SELECT</code> * <code>FROM</code> table_name <code>ORDER BY</code> column <code>DESC</code>;</li>
+<li><code>SELECT</code> * <code>FROM</code> table_name <code>ORDER BY</code> column1 <code>ASC</code>, column2 <code>DESC</code>;</li>
+</ul>
+<h3 id="SELECT-TOP-used-to-specify-the-number-of-records-to-return-from-top-of-table"><a href="#SELECT-TOP-used-to-specify-the-number-of-records-to-return-from-top-of-table" class="headerlink" title="SELECT TOP: used to specify the number of records to return from top of table"></a><strong>SELECT TOP</strong>: used to specify the number of records to return from top of table</h3><ul>
+<li><code>SELECT TOP</code> number columns_names <code>FROM</code> table_name <code>WHERE</code> condition;</li>
+<li><code>SELECT TOP</code> percent columns_names <code>FROM</code> table_name <code>WHERE</code> condition;</li>
+<li>Not all database systems support <code>SELECT TOP</code>. The MySQL equivalent is the <code>LIMIT</code> clause</li>
+<li><code>SELECT</code> column_names <code>FROM</code> table_name <code>LIMIT</code> offset, count;</li>
+</ul>
+<h3 id="LIKE-operator-used-in-a-WHERE-clause-to-search-for-a-specific-pattern-in-a-column"><a href="#LIKE-operator-used-in-a-WHERE-clause-to-search-for-a-specific-pattern-in-a-column" class="headerlink" title="LIKE: operator used in a WHERE clause to search for a specific pattern in a column"></a><strong>LIKE</strong>: operator used in a WHERE clause to search for a specific pattern in a column</h3><ul>
+<li>% (percent sign) is a wildcard character that represents zero, one, or multiple characters</li>
+<li>_ (underscore) is a wildcard character that represents a single character</li>
+<li><code>SELECT</code> column_names <code>FROM</code> table_name <code>WHERE</code> column_name <code>LIKE</code> pattern;</li>
+<li><code>LIKE</code> ‘a%’ (find any values that starts with “a”)</li>
+<li><code>LIKE</code> ‘%a’ (find any values that ends with “a”)</li>
+<li><code>LIKE</code> ‘%or%’ (find any values that have “or” in any position)</li>
+<li><code>LIKE</code> ‘_r%’ (find any values that have “r” in the second position)</li>
+<li><code>LIKE</code> ‘a_%_%’ (find any values that start with “a” and are at least 3 characters in length)</li>
+<li><code>LIKE</code> ‘[a-c]%’ (find any values starting with “a”, “b”, or “c”</li>
+</ul>
+<h3 id="IN-operator-that-allows-you-to-specify-multiple-values-in-a-WHERE-clause"><a href="#IN-operator-that-allows-you-to-specify-multiple-values-in-a-WHERE-clause" class="headerlink" title="IN: operator that allows you to specify multiple values in a WHERE clause"></a><strong>IN</strong>: operator that allows you to specify multiple values in a WHERE clause</h3><ul>
+<li>essentially the IN operator is shorthand for multiple OR conditions</li>
+<li><code>SELECT</code> column_names <code>FROM</code> table_name <code>WHERE</code> column_name <code>IN</code> (value1, value2, …);</li>
+<li><code>SELECT</code> column_names <code>FROM</code> table_name <code>WHERE</code> column_name <code>IN</code> (<code>SELECT STATEMENT</code>);</li>
+</ul>
+<h3 id="BETWEEN-operator-selects-values-within-a-given-range-inclusive"><a href="#BETWEEN-operator-selects-values-within-a-given-range-inclusive" class="headerlink" title="BETWEEN: operator selects values within a given range inclusive"></a><strong>BETWEEN</strong>: operator selects values within a given range inclusive</h3><ul>
+<li><code>SELECT</code> column_names <code>FROM</code> table_name <code>WHERE</code> column_name <code>BETWEEN</code> value1 <code>AND</code> value2;</li>
+<li><code>SELECT</code> * <code>FROM</code> Products <code>WHERE</code> (column_name <code>BETWEEN</code> value1 <code>AND</code> value2) <code>AND NOT</code> column_name2 <code>IN</code> (value3, value4);</li>
+<li><code>SELECT</code> * <code>FROM</code> Products <code>WHERE</code> column_name <code>BETWEEN</code> #01/07/1999# AND #03/12/1999#;</li>
+</ul>
+<h3 id="NULL-values-in-a-field-with-no-value"><a href="#NULL-values-in-a-field-with-no-value" class="headerlink" title="NULL: values in a field with no value"></a><strong>NULL</strong>: values in a field with no value</h3><ul>
+<li><code>SELECT</code> * <code>FROM</code> table_name <code>WHERE</code> column_name <code>IS NULL</code>;</li>
+<li><code>SELECT</code> * <code>FROM</code> table_name <code>WHERE</code> column_name <code>IS NOT NULL</code>;</li>
+</ul>
+<h3 id="AS-aliases-are-used-to-assign-a-temporary-name-to-a-table-or-column"><a href="#AS-aliases-are-used-to-assign-a-temporary-name-to-a-table-or-column" class="headerlink" title="AS: aliases are used to assign a temporary name to a table or column"></a><strong>AS</strong>: aliases are used to assign a temporary name to a table or column</h3><ul>
+<li><code>SELECT</code> column_name <code>AS</code> alias_name <code>FROM</code> table_name;</li>
+<li><code>SELECT</code> column_name <code>FROM</code> table_name <code>AS</code> alias_name;</li>
+<li><code>SELECT</code> column_name <code>AS</code> alias_name1, column_name2 <code>AS</code> alias_name2;</li>
+<li><code>SELECT</code> column_name1, column_name2 + ‘, ‘ + column_name3 <code>AS</code> alias_name;</li>
+</ul>
+<h3 id="UNION-operator-used-to-combine-the-result-set-of-two-or-more-SELECT-statements"><a href="#UNION-operator-used-to-combine-the-result-set-of-two-or-more-SELECT-statements" class="headerlink" title="UNION: operator used to combine the result-set of two or more SELECT statements"></a><strong>UNION</strong>: operator used to combine the result-set of two or more SELECT statements</h3><ul>
+<li>Each SELECT statement within UNION must have the same number of columns</li>
+<li>The columns must have similar data types</li>
+<li>The columns in each SELECT statement must also be in the same order</li>
+<li><code>SELECT</code> columns_names <code>FROM</code> table1 <code>UNION SELECT</code> column_name <code>FROM</code> table2;</li>
+<li><code>UNION</code> operator only selects distinct values, <code>UNION ALL</code> will allow duplicates</li>
+</ul>
+<h3 id="GROUP-BY-statement-often-used-with-aggregate-functions-COUNT-MAX-MIN-SUM-AVG-to-group-the-result-set-by-one-or-more-columns"><a href="#GROUP-BY-statement-often-used-with-aggregate-functions-COUNT-MAX-MIN-SUM-AVG-to-group-the-result-set-by-one-or-more-columns" class="headerlink" title="GROUP BY: statement often used with aggregate functions (COUNT, MAX, MIN, SUM, AVG) to group the result-set by one or more columns"></a><strong>GROUP BY</strong>: statement often used with aggregate functions (COUNT, MAX, MIN, SUM, AVG) to group the result-set by one or more columns</h3><ul>
+<li><code>SELECT</code> column_name1, COUNT(column_name2) <code>FROM</code> table_name <code>WHERE</code> condition <code>GROUP BY</code> column_name1 <code>ORDER BY</code> COUNT(column_name2) DESC;</li>
+</ul>
+<h3 id="HAVING-this-clause-was-added-to-SQL-because-the-WHERE-keyword-could-not-be-used-with-aggregated-functions"><a href="#HAVING-this-clause-was-added-to-SQL-because-the-WHERE-keyword-could-not-be-used-with-aggregated-functions" class="headerlink" title="HAVING: this clause was added to SQL because the WHERE keyword could not be used with aggregated functions"></a><strong>HAVING</strong>: this clause was added to SQL because the WHERE keyword could not be used with aggregated functions</h3><ul>
+<li><code>SELECT</code> <code>COUNT</code>(column_name1), column_name2 <code>FROM</code> table <code>GROUP BY</code> column_name2 <code>HAVING</code> <code>COUNT(</code>column_name1<code>)</code> &gt; 5;</li>
+</ul>
+<p><a name="modify"></a></p>
+<h1 id="2-Data-Modification-Queries"><a href="#2-Data-Modification-Queries" class="headerlink" title="2. Data Modification Queries"></a>2. Data Modification Queries</h1><h3 id="INSERT-INTO-used-to-insert-new-records-rows-in-a-table"><a href="#INSERT-INTO-used-to-insert-new-records-rows-in-a-table" class="headerlink" title="INSERT INTO: used to insert new records/rows in a table"></a><strong>INSERT INTO</strong>: used to insert new records/rows in a table</h3><ul>
+<li><code>INSERT INTO</code> table_name (column1, column2) <code>VALUES</code> (value1, value2);</li>
+<li><code>INSERT INTO</code> table_name <code>VALUES</code> (value1, value2 …);</li>
+</ul>
+<h3 id="UPDATE-used-to-modify-the-existing-records-in-a-table"><a href="#UPDATE-used-to-modify-the-existing-records-in-a-table" class="headerlink" title="UPDATE: used to modify the existing records in a table"></a><strong>UPDATE</strong>: used to modify the existing records in a table</h3><ul>
+<li><code>UPDATE</code> table_name <code>SET</code> column1 = value1, column2 = value2 <code>WHERE</code> condition;</li>
+<li><code>UPDATE</code> table_name <code>SET</code> column_name = value;</li>
+</ul>
+<h3 id="DELETE-used-to-delete-existing-records-rows-in-a-table"><a href="#DELETE-used-to-delete-existing-records-rows-in-a-table" class="headerlink" title="DELETE: used to delete existing records/rows in a table"></a><strong>DELETE</strong>: used to delete existing records/rows in a table</h3><ul>
+<li><code>DELETE FROM</code> table_name <code>WHERE</code> condition;</li>
+<li><code>DELETE</code> * <code>FROM</code> table_name;</li>
+</ul>
+<p><a name="report"></a></p>
+<h1 id="3-Reporting-Queries"><a href="#3-Reporting-Queries" class="headerlink" title="3. Reporting Queries"></a>3. Reporting Queries</h1><h3 id="COUNT-returns-the-of-occurrences"><a href="#COUNT-returns-the-of-occurrences" class="headerlink" title="COUNT: returns the # of occurrences"></a><strong>COUNT</strong>: returns the # of occurrences</h3><ul>
+<li><code>SELECT COUNT (DISTINCT</code> column_name<code>)</code>;</li>
+</ul>
+<h3 id="MIN-and-MAX-returns-the-smallest-largest-value-of-the-selected-column"><a href="#MIN-and-MAX-returns-the-smallest-largest-value-of-the-selected-column" class="headerlink" title="MIN() and MAX(): returns the smallest/largest value of the selected column"></a><strong>MIN() and MAX()</strong>: returns the smallest/largest value of the selected column</h3><ul>
+<li><code>SELECT MIN (</code>column_names<code>) FROM</code> table_name <code>WHERE</code> condition;</li>
+<li><code>SELECT MAX (</code>column_names<code>) FROM</code> table_name <code>WHERE</code> condition;</li>
+</ul>
+<h3 id="AVG-returns-the-average-value-of-a-numeric-column"><a href="#AVG-returns-the-average-value-of-a-numeric-column" class="headerlink" title="AVG(): returns the average value of a numeric column"></a><strong>AVG()</strong>: returns the average value of a numeric column</h3><ul>
+<li><code>SELECT AVG (</code>column_name<code>) FROM</code> table_name <code>WHERE</code> condition;</li>
+</ul>
+<h3 id="SUM-returns-the-total-sum-of-a-numeric-column"><a href="#SUM-returns-the-total-sum-of-a-numeric-column" class="headerlink" title="SUM(): returns the total sum of a numeric column"></a><strong>SUM()</strong>: returns the total sum of a numeric column</h3><ul>
+<li><code>SELECT SUM (</code>column_name<code>) FROM</code> table_name <code>WHERE</code> condition;</li>
+</ul>
+<p><a name="joins"></a></p>
+<h1 id="4-Join-Queries"><a href="#4-Join-Queries" class="headerlink" title="4. Join Queries"></a>4. Join Queries</h1><h3 id="INNER-JOIN-returns-records-that-have-matching-value-in-both-tables"><a href="#INNER-JOIN-returns-records-that-have-matching-value-in-both-tables" class="headerlink" title="INNER JOIN: returns records that have matching value in both tables"></a><strong>INNER JOIN</strong>: returns records that have matching value in both tables</h3><ul>
+<li><code>SELECT</code> column_names <code>FROM</code> table1 <code>INNER JOIN</code> table2 <code>ON</code> table1.column_name=table2.column_name;</li>
+<li><code>SELECT</code> table1.column_name1, table2.column_name2, table3.column_name3 <code>FROM</code> ((table1 <code>INNER JOIN</code> table2 <code>ON</code> relationship) <code>INNER JOIN</code> table3 <code>ON</code> relationship);</li>
+</ul>
+<h3 id="LEFT-OUTER-JOIN-returns-all-records-from-the-left-table-table1-and-the-matched-records-from-the-right-table-table2"><a href="#LEFT-OUTER-JOIN-returns-all-records-from-the-left-table-table1-and-the-matched-records-from-the-right-table-table2" class="headerlink" title="LEFT (OUTER) JOIN: returns all records from the left table (table1), and the matched records from the right table (table2)"></a><strong>LEFT (OUTER) JOIN</strong>: returns all records from the left table (table1), and the matched records from the right table (table2)</h3><ul>
+<li><code>SELECT</code> column_names <code>FROM</code> table1 <code>LEFT JOIN</code> table2 <code>ON</code> table1.column_name=table2.column_name;</li>
+</ul>
+<h3 id="RIGHT-OUTER-JOIN-returns-all-records-from-the-right-table-table2-and-the-matched-records-from-the-left-table-table1"><a href="#RIGHT-OUTER-JOIN-returns-all-records-from-the-right-table-table2-and-the-matched-records-from-the-left-table-table1" class="headerlink" title="RIGHT (OUTER) JOIN: returns all records from the right table (table2), and the matched records from the left table (table1)"></a><strong>RIGHT (OUTER) JOIN</strong>: returns all records from the right table (table2), and the matched records from the left table (table1)</h3><ul>
+<li><code>SELECT</code> column_names <code>FROM</code> table1 <code>RIGHT JOIN</code> table2 <code>ON</code> table1.column_name=table2.column_name;</li>
+</ul>
+<h3 id="FULL-OUTER-JOIN-returns-all-records-when-there-is-a-match-in-either-left-or-right-table"><a href="#FULL-OUTER-JOIN-returns-all-records-when-there-is-a-match-in-either-left-or-right-table" class="headerlink" title="FULL (OUTER) JOIN: returns all records when there is a match in either left or right table"></a><strong>FULL (OUTER) JOIN</strong>: returns all records when there is a match in either left or right table</h3><ul>
+<li><code>SELECT</code> column_names <code>FROM</code> table1 <code>FULL OUTER JOIN</code> table2 <code>ON</code> table1.column_name=table2.column_name;</li>
+</ul>
+<h3 id="Self-JOIN-a-regular-join-but-the-table-is-joined-with-itself"><a href="#Self-JOIN-a-regular-join-but-the-table-is-joined-with-itself" class="headerlink" title="Self JOIN: a regular join, but the table is joined with itself"></a><strong>Self JOIN</strong>: a regular join, but the table is joined with itself</h3><ul>
+<li><code>SELECT</code> column_names <code>FROM</code> table1 T1, table1 T2 <code>WHERE</code> condition;</li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/04/20/proxy/" data-toggle="tooltip" data-placement="top" title="proxy setting">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/03/18/linuxCommand/" data-toggle="tooltip" data-placement="top" title="linuxCommand">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#sql" title="sql">sql</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Moloach&#39;s Blog 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> 
+                    <!-- <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<!--<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
