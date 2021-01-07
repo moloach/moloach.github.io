@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
@@ -90,14 +90,14 @@
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -158,7 +158,7 @@
         background-image: url('/img/paul-gilmore.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -194,7 +194,7 @@
                 <h1 id="作为指令"><a href="#作为指令" class="headerlink" title="作为指令"></a>作为指令</h1><p>为命名空间创建别名或导入在其他命名空间中定义的类型。</p>
 <h2 id="允许在命名空间中使用类型，"><a href="#允许在命名空间中使用类型，" class="headerlink" title="允许在命名空间中使用类型，"></a>允许在命名空间中使用类型，</h2><p>这样无需在该命名空间中限定某个类型的使用</p>
 <h2 id="允许访问类型的静态成员"><a href="#允许访问类型的静态成员" class="headerlink" title="允许访问类型的静态成员"></a>允许访问类型的静态成员</h2><p>无需限定使用类型名称进行访问。</p>
-<h2 id="为命名空间或类型创建别名。"><a href="#为命名空间或类型创建别名。" class="headerlink" title="为命名空间或类型创建别名。"></a>为命名空间或类型创建别名。</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">using System.Text;</span><br><span class="line"></span><br><span class="line">using static System.Math;</span><br><span class="line"></span><br><span class="line">using Project = PC.MyCompany.MyProject;</span><br></pre></td></tr></table></figure>
+<h2 id="为命名空间或类型创建别名。"><a href="#为命名空间或类型创建别名。" class="headerlink" title="为命名空间或类型创建别名。"></a>为命名空间或类型创建别名。</h2><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">static</span> System.Math;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Project = PC.MyCompany.MyProject;</span><br></pre></td></tr></table></figure>
 <h1 id="using-语句"><a href="#using-语句" class="headerlink" title="using 语句"></a>using 语句</h1><p>提供可确保正确使用 IDisposable 对象的方便语法。</p>
 <h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> (Font font1 = <span class="keyword">new</span> Font(<span class="string">"Arial"</span>,<span class="number">10.0</span>f))&#123;</span><br><span class="line">    <span class="keyword">byte</span> charset = font1.GdiCharSet;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>File和Font是访问非托管资源的托管类型的示例。有许多其他类别的非托管资源和封装这些资源的类库类型。 所有此类类型都必须实现 IDisposable 接口。</p>
@@ -215,12 +215,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2017/08/17/Csharp 知识点 part 2（out 泛型修饰符，协变和逆变）/" data-toggle="tooltip" data-placement="top" title="C# 知识点 part 2（out 泛型修饰符，协变和逆变）">&larr; Previous Post</a>
+                            <a href="/2017/08/02/Csharp 知识点 part 3（协变和逆变）/" data-toggle="tooltip" data-placement="top" title="C# 知识点 part 3（协变和逆变）">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/2017/08/02/Csharp-(const和readonly、静态类、函数、成员、out和ref)/" data-toggle="tooltip" data-placement="top" title="C# (const和readonly、静态类、函数、成员、out和ref)">Next Post &rarr;</a>
+                            <a href="/2017/08/02/Csharp-lambda/" data-toggle="tooltip" data-placement="top" title="C# （lambda表达式）">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -331,7 +331,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Moloach&#39;s Blog 2020 
+                    Copyright &copy; Moloach&#39;s Blog 2021 
                     <br>
                     Theme by <a href="http://huangxuan.me">Hux</a> 
                     <span style="display: inline-block; margin: 0 5px;">
